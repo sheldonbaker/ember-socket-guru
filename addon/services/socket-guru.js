@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import adapterLookup from 'ember-socket-guru/util/adapter-lookup';
 
-const { Service, get, set } = Ember;
+const { Service, get, set, getOwner } = Ember;
 
 export default Service.extend({
   adapterLookup,
@@ -34,6 +34,13 @@ export default Service.extend({
 
   observedChannels: null,
 
+  init() {
+    this._super(...arguments);
+    if (get(this, 'autoConnect')) {
+      this.setup();
+    }
+  },
+
   willDestroy() {
     this._super(...arguments);
     const client = get(this, 'client');
@@ -47,12 +54,9 @@ export default Service.extend({
    * passing in the config object
    */
   setup() {
-    const adapter = get(this, 'adapterLookup')(get(this, 'adapter'));
+    const adapter = get(this, 'adapterLookup')(getOwner(this), get(this, 'adapter'));
     set(this, 'client', adapter);
     get(this, 'client').setup(get(this, 'config'));
-  },
-
-  subscribeToChannels() {
     get(this, 'client').subscribe(get(this, 'observedChannels'));
   },
 });
