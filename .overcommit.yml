@@ -1,0 +1,17 @@
+PreCommit:
+  ALL:
+    exclude:
+      - 'public/**/*'
+      - 'bower_components/**/*'
+      - 'node_modules/**/*'
+      - 'vendor/**/*'
+
+  EsLint:
+    enabled: true
+    required_executable: 'node_modules/.bin/eslint'
+    on_warn: pass
+    exclude:
+      - 'ember-cli-build.js'
+
+  TrailingWhitespace:
+    enabled: true
