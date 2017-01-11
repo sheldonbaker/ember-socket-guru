@@ -16,8 +16,10 @@ export default function(name, options = {}) {
     },
 
     afterEach() {
-      let afterEach = options.afterEach && options.afterEach.apply(this, arguments);
+      const afterEach = options.afterEach && options.afterEach.apply(this, arguments);
+      /* eslint-disable netguru-ember/named-functions-in-promises */
       return Promise.resolve(afterEach).then(() => destroyApp(this.application));
-    }
+      /* eslint-enable */
+    },
   });
 }
