@@ -34,6 +34,12 @@ export default Service.extend({
 
   observedChannels: null,
 
+  willDestroy() {
+    this._super(...arguments);
+    const client = get(this, 'client');
+    if (client) client.unsubscribe();
+  },
+
   /**
    * Deals with instrumentation of the adapter.
    *
