@@ -7,29 +7,29 @@ const { get, run } = Ember;
 moduleFor('service:socket-guru', 'Unit | Service | socket guru');
 
 test('setup function', function(assert) {
-  const adapterSetupSpy = sinon.spy();
+  const socketClientSetupSpy = sinon.spy();
   const unsubscribeSpy = sinon.spy();
-  const adapter = {
-    setup: adapterSetupSpy,
+  const socketClient = {
+    setup: socketClientSetupSpy,
     subscribe() {},
     unsubscribe: unsubscribeSpy,
   };
-  const adapterLookupSpy = sinon.spy(() => adapter);
+  const socketClientLookupSpy = sinon.spy(() => socketClient);
   const config = { pusherKey: 'FOO' };
   const service = this.subject({
     config,
-    adapter: 'pusher',
-    adapterLookup: adapterLookupSpy,
+    socketClient: 'pusher',
+    socketClientLookup: socketClientLookupSpy,
   });
 
-  assert.ok(adapterLookupSpy.calledOnce, 'it uses adapter lookup');
-  assert.equal(adapterLookupSpy.args[0][1], 'pusher', 'it passes proper adapter name');
-  assert.deepEqual(get(service, 'client'), adapter, 'it sets the client properly');
-  assert.ok(adapterSetupSpy.calledOnce, 'it calls the setup function on adapter');
+  assert.ok(socketClientLookupSpy.calledOnce, 'it uses socketClient lookup');
+  assert.equal(socketClientLookupSpy.args[0][1], 'pusher', 'it passes proper socketClient name');
+  assert.deepEqual(get(service, 'client'), socketClient, 'it sets the client properly');
+  assert.ok(socketClientSetupSpy.calledOnce, 'it calls the setup function on socketClient');
   assert.deepEqual(
-    adapterSetupSpy.args[0][0],
+    socketClientSetupSpy.args[0][0],
     config,
-    'it calls the setup function on adapter passing the config'
+    'it calls the setup function on socketClient passing the config'
   );
 
   run(() => {
@@ -38,46 +38,46 @@ test('setup function', function(assert) {
 
   assert.ok(
     unsubscribeSpy.calledOnce,
-    'it calls the unsubscribe function on adapter when destroyed'
+    'it calls the unsubscribe function on socketClient when destroyed'
   );
 });
 
-test('it delegates subscription to adapter', function(assert) {
-  const adapterSubscribeSpy = sinon.spy();
+test('it delegates subscription to socketClient', function(assert) {
+  const socketClientSubscribeSpy = sinon.spy();
   const observedChannels = [
       { channel1: ['event1'] },
   ];
-  const adapterLookup = () => ({
-    subscribe: adapterSubscribeSpy,
+  const socketClientLookup = () => ({
+    subscribe: socketClientSubscribeSpy,
     setup() {},
     unsubscribe() {},
   });
   this.subject({
     autoConnect: true,
     observedChannels,
-    adapterLookup,
-    adapter: 'pusher',
+    socketClientLookup,
+    socketClient: 'pusher',
   });
 
-  assert.ok(adapterSubscribeSpy.calledOnce, 'it calls the subscribe function on adapter');
+  assert.ok(socketClientSubscribeSpy.calledOnce, 'it calls the subscribe function on socketClient');
   assert.deepEqual(
-    adapterSubscribeSpy.args[0][0],
+    socketClientSubscribeSpy.args[0][0],
     observedChannels,
-    'it passes the observed channels to the subscribe function on adapter'
+    'it passes the observed channels to the subscribe function on socketClient'
   );
 });
 
-test('it calls subscribe on adapter only if autoConnect true', function(assert) {
+test('it calls subscribe on socketClient only if autoConnect true', function(assert) {
   const subscribeSpy = sinon.spy();
   const setupSpy = sinon.spy();
-  const adapterLookup = () => ({
+  const socketClientLookup = () => ({
     setup: setupSpy,
     subscribe: subscribeSpy,
     unsubscribe() {},
   });
   this.subject({
-    adapterLookup,
-    adapter: 'pusher',
+    socketClientLookup,
+    socketClient: 'pusher',
   });
 
 
@@ -87,18 +87,18 @@ test('it calls subscribe on adapter only if autoConnect true', function(assert) 
   );
 });
 
-test('it doesnt call subscribe on on adapter if autoConnect false', function(assert) {
+test('it doesnt call subscribe on on socketClient if autoConnect false', function(assert) {
   const subscribeSpy = sinon.spy();
   const setupSpy = sinon.spy();
-  const adapterLookup = () => ({
+  const socketClientLookup = () => ({
     setup: setupSpy,
     subscribe: subscribeSpy,
     unsubscribe() {},
   });
   this.subject({
     autoConnect: false,
-    adapterLookup,
-    adapter: 'pusher',
+    socketClientLookup,
+    socketClient: 'pusher',
   });
 
 

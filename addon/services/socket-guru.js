@@ -1,15 +1,21 @@
 import Ember from 'ember';
-import adapterLookup from 'ember-socket-guru/util/adapter-lookup';
+import socketClientLookup from 'ember-socket-guru/util/socket-client-lookup';
 
-const { Service, get, set, getOwner } = Ember;
+const {
+  Service,
+  get,
+  set,
+  getOwner,
+  Evented,
+} = Ember;
 
-export default Service.extend({
-  adapterLookup,
+export default Service.extend(Evented, {
+  socketClientLookup,
 
   /**
    * Configuration for given client
    *
-   * After the actual adapter is resolved this object is then passed into it
+   * After the actual socketClient is resolved this object is then passed into it
    * which allows additional configuration.
    * @param config
    * @type {Object}
@@ -17,21 +23,34 @@ export default Service.extend({
   config: null,
 
   /**
-   * Adapter name, that will be used to resolve the actual adapter.
-   * @param adapter
+   * Socket client name, that will be used to resolve the actual socketClient.
+   * @param socketClient
    * @type {String}
    */
-  adapter: null,
+  socketClient: null,
 
   /**
-   * Adapter instance resolved using name.
+   * Socket client instance resolved using name.
    * @param client
    * @type {Object}
    */
   client: null,
 
+  /**
+   * Determines whether service should connect to client on startup.
+   * @param autConnect
+   * @type {Boolean}
+   */
   autoConnect: true,
 
+  /**
+   * Array containing all channels and events.
+   *
+   * Array containing objects, where the key name is the channel name
+   * and the value a list of observed events
+   * @param observedChannels
+   * @type {Array[Object]}
+   */
   observedChannels: null,
 
   init() {
@@ -44,18 +63,20 @@ export default Service.extend({
   willDestroy() {
     this._super(...arguments);
     const client = get(this, 'client');
-    if (client) client.unsubscribe();
+    if (client) {
+      client.unsubscribe();
+    }
   },
 
   /**
-   * Deals with instrumentation of the adapter.
+   * Deals with instrumentation of the socketClient.
    *
-   * Looks up the adapter using it's string name and calls it's `setup` method
+   * Looks up the socketClient using it's string name and calls it's `setup` method
    * passing in the config object
    */
   setup() {
-    const adapter = get(this, 'adapterLookup')(getOwner(this), get(this, 'adapter'));
-    set(this, 'client', adapter);
+    const socketClient = get(this, 'socketClientLookup')(getOwner(this), get(this, 'socketClient'));
+    set(this, 'client', socketClient);
     get(this, 'client').setup(get(this, 'config'));
     get(this, 'client').subscribe(get(this, 'observedChannels'));
   },
