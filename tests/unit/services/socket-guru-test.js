@@ -107,3 +107,85 @@ test('it doesnt call subscribe on on socketClient if autoConnect false', functio
     'it doesnt call setup and subscribe'
   );
 });
+
+test('adding observed channels', function(assert) {
+  const subscribeSpy = sinon.spy();
+  const unsubscribeChannelsSpy = sinon.spy();
+  const socketClientLookup = () => ({
+    setup: sinon.spy(),
+    subscribe: subscribeSpy,
+    unsubscribe() {},
+    unsubscribeChannels: unsubscribeChannelsSpy,
+  });
+  const service = this.subject({
+    client: socketClientLookup(),
+    autoConnect: false,
+    observedChannels: [{ oldChannel: ['oldData'] }],
+    socketClient: 'pusher',
+  });
+
+  const channelsToAdd = { testChannel: ['event1'] };
+  service.addObservedChannels(channelsToAdd);
+
+  assert.ok(subscribeSpy.calledOnce, 'it calls the subscribe method on the client');
+  assert.deepEqual(
+    subscribeSpy.args[0][0],
+    [channelsToAdd],
+    'it passes proper arguments to the client'
+  );
+});
+
+test('updating existing channels', function(assert) {
+  const subscribeSpy = sinon.spy();
+  const unsubscribeChannelsSpy = sinon.spy();
+  const socketClientLookup = () => ({
+    setup: sinon.spy(),
+    subscribe: subscribeSpy,
+    unsubscribe() {},
+    unsubscribeChannels: unsubscribeChannelsSpy,
+  });
+  const service = this.subject({
+    client: socketClientLookup(),
+    autoConnect: false,
+    observedChannels: [{ oldChannel: ['oldData'] }],
+    socketClient: 'pusher',
+  });
+
+  const channelsToUpdate = { testChannel: ['event1'] };
+  service.updateObservedChannels([channelsToUpdate]);
+
+  assert.ok(subscribeSpy.calledOnce, 'it calls the subscribe method on the client');
+  assert.deepEqual(
+    subscribeSpy.args[0][0],
+    [channelsToUpdate],
+    'it passes proper channels to unsubscribe'
+  );
+
+  assert.ok(unsubscribeChannelsSpy.calledOnce, 'it calls the unsubscribe method on the client');
+  assert.deepEqual(
+    unsubscribeChannelsSpy.args[0][0],
+    [{ oldChannel: ['oldData'] }],
+    'it passes proper channels for the client to unsubscribe'
+  );
+});
+
+test('removing channels', function(assert) {
+  const subscribeSpy = sinon.spy();
+  const unsubscribeChannelsSpy = sinon.spy();
+  const socketClientLookup = () => ({
+    setup: sinon.spy(),
+    subscribe: subscribeSpy,
+    unsubscribe() {},
+    unsubscribeChannels: unsubscribeChannelsSpy,
+  });
+  const service = this.subject({
+    client: socketClientLookup(),
+    autoConnect: false,
+    observedChannels: [{ oldChannel: ['oldData'] }, { oldChannel2: ['oldEvent2'] }],
+    socketClient: 'pusher',
+  });
+
+  service.removeObservedChannel('oldChannel');
+
+  assert.ok(unsubscribeChannelsSpy.calledOnce, 'it calls the unsubscribe method on the client');
+});

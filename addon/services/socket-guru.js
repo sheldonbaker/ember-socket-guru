@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import socketClientLookup from 'ember-socket-guru/util/socket-client-lookup';
+import { channelsDiff, removeChannel } from 'ember-socket-guru/util/channels-diff';
 
 const {
   Service,
@@ -7,6 +8,7 @@ const {
   set,
   getOwner,
   Evented,
+  isArray,
 } = Ember;
 
 export default Service.extend(Evented, {
@@ -79,5 +81,34 @@ export default Service.extend(Evented, {
     set(this, 'client', socketClient);
     get(this, 'client').setup(get(this, 'config'));
     get(this, 'client').subscribe(get(this, 'observedChannels'));
+  },
+
+  addObservedChannels(newObservedChannels) {
+    const channelData = get(this, 'observedChannels');
+    const updatedChannelsData = isArray(newObservedChannels) ?
+      [...channelData, ...newObservedChannels] :
+      [...channelData, newObservedChannels];
+    this._manageChannelsChange(channelData, updatedChannelsData);
+  },
+
+  removeObservedChannel(channelName) {
+    const observed = get(this, 'observedChannels');
+    this._manageChannelsChange(
+      observed,
+      removeChannel(observed, channelName)
+    );
+  },
+
+  updateObservedChannels(newObservedChannels) {
+    this._manageChannelsChange(get(this, 'observedChannels'), newObservedChannels);
+  },
+
+  _manageChannelsChange(oldChannelsData, newChannelsData) {
+    const {
+      channelsToSubscribe,
+      channelsToUnsubscribe,
+    } = channelsDiff(oldChannelsData, newChannelsData);
+    get(this, 'client').subscribe(channelsToSubscribe);
+    get(this, 'client').unsubscribeChannels(channelsToUnsubscribe);
   },
 });
