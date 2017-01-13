@@ -80,7 +80,6 @@ test('it calls subscribe on socketClient only if autoConnect true', function(ass
     socketClient: 'pusher',
   });
 
-
   assert.ok(
     subscribeSpy.calledOnce && setupSpy.calledOnce,
     'it calls the setup and subscribe functions by default'
@@ -100,7 +99,6 @@ test('it doesnt call subscribe on on socketClient if autoConnect false', functio
     socketClientLookup,
     socketClient: 'pusher',
   });
-
 
   assert.notOk(
     subscribeSpy.calledOnce || setupSpy.calledOnce,

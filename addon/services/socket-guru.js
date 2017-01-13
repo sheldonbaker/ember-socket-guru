@@ -85,9 +85,9 @@ export default Service.extend(Evented, {
 
   addObservedChannels(newObservedChannels) {
     const channelData = get(this, 'observedChannels');
-    const updatedChannelsData = isArray(newObservedChannels) ?
-      [...channelData, ...newObservedChannels] :
-      [...channelData, newObservedChannels];
+    const updatedChannelsData = isArray(newObservedChannels)
+      ? [...channelData, ...newObservedChannels]
+      : [...channelData, newObservedChannels];
     this._manageChannelsChange(channelData, updatedChannelsData);
   },
 
