@@ -1,4 +1,5 @@
-/*jshint node:true*/
+/* eslint-env node*/
+/* eslint-disable no-var */
 /* global require, module */
 var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
@@ -7,12 +8,10 @@ module.exports = function(defaults) {
     // Add options here
   });
 
-  /*
-    This build file specifies the options for the dummy test app of this
-    addon, located in `/tests/dummy`
-    This build file does *not* influence how the addon or the app using it
-    behave. You most likely want to be modifying `./index.js` or app's build file
-  */
+  app.import('bower_components/pusher/dist/web/pusher.js');
+  if (app.env === 'test') {
+    app.import('bower_components/pusher-test-stub/build/bin/pusher-test-stub.js');
+  }
 
   return app.toTree();
 };

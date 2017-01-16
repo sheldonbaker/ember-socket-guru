@@ -66,7 +66,7 @@ export default Service.extend(Evented, {
     this._super(...arguments);
     const client = get(this, 'client');
     if (client) {
-      client.unsubscribe();
+      client.disconnect();
     }
   },
 

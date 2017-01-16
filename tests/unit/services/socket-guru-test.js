@@ -8,11 +8,11 @@ moduleFor('service:socket-guru', 'Unit | Service | socket guru');
 
 test('setup function', function(assert) {
   const socketClientSetupSpy = sinon.spy();
-  const unsubscribeSpy = sinon.spy();
+  const disconnectSpy = sinon.spy();
   const socketClient = {
     setup: socketClientSetupSpy,
     subscribe() {},
-    unsubscribe: unsubscribeSpy,
+    disconnect: disconnectSpy,
   };
   const socketClientLookupSpy = sinon.spy(() => socketClient);
   const config = { pusherKey: 'FOO' };
@@ -37,7 +37,7 @@ test('setup function', function(assert) {
   });
 
   assert.ok(
-    unsubscribeSpy.calledOnce,
+    disconnectSpy.calledOnce,
     'it calls the unsubscribe function on socketClient when destroyed'
   );
 });
@@ -50,7 +50,7 @@ test('it delegates subscription to socketClient', function(assert) {
   const socketClientLookup = () => ({
     subscribe: socketClientSubscribeSpy,
     setup() {},
-    unsubscribe() {},
+    disconnect() {},
   });
   this.subject({
     autoConnect: true,
@@ -73,7 +73,7 @@ test('it calls subscribe on socketClient only if autoConnect true', function(ass
   const socketClientLookup = () => ({
     setup: setupSpy,
     subscribe: subscribeSpy,
-    unsubscribe() {},
+    disconnect() {},
   });
   this.subject({
     socketClientLookup,
@@ -92,7 +92,7 @@ test('it doesnt call subscribe on on socketClient if autoConnect false', functio
   const socketClientLookup = () => ({
     setup: setupSpy,
     subscribe: subscribeSpy,
-    unsubscribe() {},
+    disconnect() {},
   });
   this.subject({
     autoConnect: false,
@@ -112,7 +112,7 @@ test('adding observed channels', function(assert) {
   const socketClientLookup = () => ({
     setup: sinon.spy(),
     subscribe: subscribeSpy,
-    unsubscribe() {},
+    disconnect() {},
     unsubscribeChannels: unsubscribeChannelsSpy,
   });
   const service = this.subject({
@@ -139,7 +139,7 @@ test('updating existing channels', function(assert) {
   const socketClientLookup = () => ({
     setup: sinon.spy(),
     subscribe: subscribeSpy,
-    unsubscribe() {},
+    disconnect() {},
     unsubscribeChannels: unsubscribeChannelsSpy,
   });
   const service = this.subject({
@@ -173,7 +173,7 @@ test('removing channels', function(assert) {
   const socketClientLookup = () => ({
     setup: sinon.spy(),
     subscribe: subscribeSpy,
-    unsubscribe() {},
+    disconnect() {},
     unsubscribeChannels: unsubscribeChannelsSpy,
   });
   const service = this.subject({
