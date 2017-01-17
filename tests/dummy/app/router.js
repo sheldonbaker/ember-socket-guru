@@ -7,7 +7,9 @@ const Router = Ember.Router.extend({
 });
 
 /* eslint-disable array-callback-return */
-Router.map(function() {});
+Router.map(function() {
+  this.route('pusher-example');
+});
 /* eslint-enable */
 
 export default Router;

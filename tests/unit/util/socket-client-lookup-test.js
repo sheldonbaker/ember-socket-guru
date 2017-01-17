@@ -12,5 +12,5 @@ test('it looks up socketClient', function(assert) {
 test('it uses the container to look up socketClient', function(assert) {
   const lookupSpy = sinon.spy();
   socketClientLookup({ lookup: lookupSpy }, 'socket-io');
-  assert.ok(lookupSpy.withArgs('socket-client:socket-io').calledOnce);
+  assert.ok(lookupSpy.withArgs('ember-socket-guru@socket-client:socket-io').calledOnce);
 });

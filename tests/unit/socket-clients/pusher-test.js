@@ -5,7 +5,7 @@ import sinon from 'sinon';
 module('Unit | Socket Clients | pusher');
 
 const getPusherStub = (
-  bindSpy,
+  bindSpy = function() {},
   subscribeSpy = function() {},
   unsubscribeSpy = function() {},
   disconnectSpy = function() {}
@@ -20,6 +20,25 @@ const getPusherStub = (
 
   return pusherStub;
 };
+
+test('it verifies required config options', function(assert) {
+  const client = PusherClient.create({
+    pusherService: getPusherStub(),
+  });
+
+  assert.throws(() => {
+    client.setup();
+  }, /need to provide pusher key/, 'it throws when no pusherKey present');
+
+  const pusherInstance = window.Pusher;
+  window.Pusher = null;
+
+  assert.throws(() => {
+    client.setup('FOO_KEY');
+  }, /need to include the pusher library/, 'it throws when pusher not installed');
+
+  window.Pusher = pusherInstance;
+});
 
 test('setup function', function(assert) {
   const bindSpy = sinon.spy();

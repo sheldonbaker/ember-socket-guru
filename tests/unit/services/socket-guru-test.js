@@ -15,8 +15,9 @@ test('setup function', function(assert) {
     disconnect: disconnectSpy,
   };
   const socketClientLookupSpy = sinon.spy(() => socketClient);
-  const config = { pusherKey: 'FOO' };
+  const config = { setting: 'FOO' };
   const service = this.subject({
+    pusherKey: 'FOO',
     config,
     socketClient: 'pusher',
     socketClientLookup: socketClientLookupSpy,
@@ -27,8 +28,8 @@ test('setup function', function(assert) {
   assert.deepEqual(get(service, 'client'), socketClient, 'it sets the client properly');
   assert.ok(socketClientSetupSpy.calledOnce, 'it calls the setup function on socketClient');
   assert.deepEqual(
-    socketClientSetupSpy.args[0][0],
-    config,
+    socketClientSetupSpy.args[0].slice(0, 2),
+    ['FOO', config],
     'it calls the setup function on socketClient passing the config'
   );
 

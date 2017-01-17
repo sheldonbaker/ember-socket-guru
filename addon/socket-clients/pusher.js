@@ -2,7 +2,7 @@
 import Ember from 'ember';
 import fetchEvents from 'ember-socket-guru/util/fetch-events';
 
-const { get, set, setProperties, $, run } = Ember;
+const { get, set, setProperties, $, run, assert } = Ember;
 const pusherService = Pusher;
 
 export default Ember.Object.extend({
@@ -11,11 +11,12 @@ export default Ember.Object.extend({
   socket: null,
   eventHandler: null,
 
-  setup({ pusherKey }, eventHandler) {
+  setup(pusherKey, config, eventHandler) {
     const PusherService = get(this, 'pusherService');
+    this._checkConfig(pusherKey, config);
     setProperties(this, {
       eventHandler,
-      socket: new PusherService(pusherKey),
+      socket: new PusherService(pusherKey, config),
     });
 
     get(this, 'socket').connection
@@ -59,5 +60,16 @@ export default Ember.Object.extend({
     channel.bind(event, (data) => {
       run(() => get(this, 'eventHandler')(event, data));
     });
+  },
+
+  _checkConfig(pusherKey) {
+    assert(
+      '[ember-sockets-guru] You need to provide pusher key in the socket-guru service',
+      !!pusherKey
+    );
+    assert(
+      '[ember-sockets-guru] You need to include the pusher library',
+      !!window.Pusher
+    );
   },
 });
