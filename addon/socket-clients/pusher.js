@@ -1,4 +1,3 @@
-/* global Pusher */
 import Ember from 'ember';
 import fetchEvents from 'ember-socket-guru/util/fetch-events';
 
