@@ -2,10 +2,9 @@ import Ember from 'ember';
 import fetchEvents from 'ember-socket-guru/util/fetch-events';
 
 const { get, set, setProperties, $, run, assert } = Ember;
-const pusherService = Pusher;
 
 export default Ember.Object.extend({
-  pusherService,
+  pusherService: Pusher,
   socketId: null,
   socket: null,
   eventHandler: null,
