@@ -6,15 +6,23 @@ const { get, run } = Ember;
 
 moduleFor('service:socket-guru', 'Unit | Service | socket guru');
 
+const socketClient = (
+  setupSpy = function() {},
+  subscribeSpy = function() {},
+  disconnectSpy = function() {},
+  unsubscribeChannelsSpy = function() {}
+) => ({
+  setup: setupSpy,
+  subscribe: subscribeSpy,
+  disconnect: disconnectSpy,
+  unsubscribeChannels: unsubscribeChannelsSpy,
+});
+
 test('setup function', function(assert) {
-  const socketClientSetupSpy = sinon.spy();
+  const setupSpy = sinon.spy();
   const disconnectSpy = sinon.spy();
-  const socketClient = {
-    setup: socketClientSetupSpy,
-    subscribe() {},
-    disconnect: disconnectSpy,
-  };
-  const socketClientLookupSpy = sinon.spy(() => socketClient);
+  const client = socketClient(setupSpy, function() {}, disconnectSpy);
+  const socketClientLookupSpy = sinon.spy(() => client);
   const config = { setting: 'FOO' };
   const service = this.subject({
     pusherKey: 'FOO',
@@ -25,10 +33,10 @@ test('setup function', function(assert) {
 
   assert.ok(socketClientLookupSpy.calledOnce, 'it uses socketClient lookup');
   assert.equal(socketClientLookupSpy.args[0][1], 'pusher', 'it passes proper socketClient name');
-  assert.deepEqual(get(service, 'client'), socketClient, 'it sets the client properly');
-  assert.ok(socketClientSetupSpy.calledOnce, 'it calls the setup function on socketClient');
+  assert.deepEqual(get(service, 'client'), client, 'it sets the client properly');
+  assert.ok(setupSpy.calledOnce, 'it calls the setup function on socketClient');
   assert.deepEqual(
-    socketClientSetupSpy.args[0].slice(0, 2),
+    setupSpy.args[0].slice(0, 2),
     ['FOO', config],
     'it calls the setup function on socketClient passing the config'
   );
@@ -44,15 +52,11 @@ test('setup function', function(assert) {
 });
 
 test('it delegates subscription to socketClient', function(assert) {
-  const socketClientSubscribeSpy = sinon.spy();
+  const subscribeSpy = sinon.spy();
   const observedChannels = [
       { channel1: ['event1'] },
   ];
-  const socketClientLookup = () => ({
-    subscribe: socketClientSubscribeSpy,
-    setup() {},
-    disconnect() {},
-  });
+  const socketClientLookup = () => socketClient(function() {}, subscribeSpy);
   this.subject({
     autoConnect: true,
     observedChannels,
@@ -60,9 +64,9 @@ test('it delegates subscription to socketClient', function(assert) {
     socketClient: 'pusher',
   });
 
-  assert.ok(socketClientSubscribeSpy.calledOnce, 'it calls the subscribe function on socketClient');
+  assert.ok(subscribeSpy.calledOnce, 'it calls the subscribe function on socketClient');
   assert.deepEqual(
-    socketClientSubscribeSpy.args[0][0],
+    subscribeSpy.args[0][0],
     observedChannels,
     'it passes the observed channels to the subscribe function on socketClient'
   );
@@ -71,11 +75,7 @@ test('it delegates subscription to socketClient', function(assert) {
 test('it calls subscribe on socketClient only if autoConnect true', function(assert) {
   const subscribeSpy = sinon.spy();
   const setupSpy = sinon.spy();
-  const socketClientLookup = () => ({
-    setup: setupSpy,
-    subscribe: subscribeSpy,
-    disconnect() {},
-  });
+  const socketClientLookup = () => socketClient(setupSpy, subscribeSpy);
   this.subject({
     socketClientLookup,
     socketClient: 'pusher',
@@ -90,11 +90,7 @@ test('it calls subscribe on socketClient only if autoConnect true', function(ass
 test('it doesnt call subscribe on on socketClient if autoConnect false', function(assert) {
   const subscribeSpy = sinon.spy();
   const setupSpy = sinon.spy();
-  const socketClientLookup = () => ({
-    setup: setupSpy,
-    subscribe: subscribeSpy,
-    disconnect() {},
-  });
+  const socketClientLookup = () => socketClient(setupSpy, subscribeSpy);
   this.subject({
     autoConnect: false,
     socketClientLookup,
@@ -110,12 +106,11 @@ test('it doesnt call subscribe on on socketClient if autoConnect false', functio
 test('adding observed channels', function(assert) {
   const subscribeSpy = sinon.spy();
   const unsubscribeChannelsSpy = sinon.spy();
-  const socketClientLookup = () => ({
-    setup: sinon.spy(),
-    subscribe: subscribeSpy,
-    disconnect() {},
-    unsubscribeChannels: unsubscribeChannelsSpy,
-  });
+  const socketClientLookup = () => {
+    return socketClient(
+      function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
+    );
+  };
   const service = this.subject({
     client: socketClientLookup(),
     autoConnect: false,
@@ -137,12 +132,11 @@ test('adding observed channels', function(assert) {
 test('updating existing channels', function(assert) {
   const subscribeSpy = sinon.spy();
   const unsubscribeChannelsSpy = sinon.spy();
-  const socketClientLookup = () => ({
-    setup: sinon.spy(),
-    subscribe: subscribeSpy,
-    disconnect() {},
-    unsubscribeChannels: unsubscribeChannelsSpy,
-  });
+  const socketClientLookup = () => {
+    return socketClient(
+      function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
+    );
+  };
   const service = this.subject({
     client: socketClientLookup(),
     autoConnect: false,
@@ -171,12 +165,11 @@ test('updating existing channels', function(assert) {
 test('removing channels', function(assert) {
   const subscribeSpy = sinon.spy();
   const unsubscribeChannelsSpy = sinon.spy();
-  const socketClientLookup = () => ({
-    setup: sinon.spy(),
-    subscribe: subscribeSpy,
-    disconnect() {},
-    unsubscribeChannels: unsubscribeChannelsSpy,
-  });
+  const socketClientLookup = () => {
+    return socketClient(
+      function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
+    );
+  };
   const service = this.subject({
     client: socketClientLookup(),
     autoConnect: false,
