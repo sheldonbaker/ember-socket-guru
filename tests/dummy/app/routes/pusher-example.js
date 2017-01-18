@@ -3,5 +3,4 @@ import SocketEventHandlerMixin from 'ember-socket-guru/mixins/socket-event-handl
 
 const { Route } = Ember;
 
-export default Route.extend(SocketEventHandlerMixin, {
-});
+export default Route.extend(SocketEventHandlerMixin);

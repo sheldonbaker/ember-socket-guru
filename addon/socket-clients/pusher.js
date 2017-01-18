@@ -34,7 +34,7 @@ export default Ember.Object.extend({
   unsubscribeChannels(observedChannels) {
     observedChannels
       .map(channel => Object.keys(channel)[0])
-      .forEach((channel) => get(this, 'socket').unsubscribe(channel));
+      .forEach(channel => get(this, 'socket').unsubscribe(channel));
   },
 
   disconnect() {

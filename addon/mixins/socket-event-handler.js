@@ -4,7 +4,6 @@ const {
   Mixin,
   get,
   inject: { service },
-  A: emberArray,
 } = Ember;
 
 export default Mixin.create({
@@ -22,7 +21,7 @@ export default Mixin.create({
 
   _handleEvent(event, data) {
     const method = this._getEventMethod(event);
-    if (method) { return method(data); }
+    if (method) return method(data);
     if (this.onPusherAction && this.onPusherAction.apply) {
       this.onPusherAction(event, data);
     }
@@ -30,7 +29,7 @@ export default Mixin.create({
 
   _getEventMethod(methodName) {
     const pusherActions = get(this, 'pusherActions') || [];
-    const method = emberArray(Object.keys(pusherActions))
+    const method = Object.keys(pusherActions)
       .find((key) => key === methodName);
     if (method) {
       return get(this, `pusherActions.${methodName}`).bind(this);

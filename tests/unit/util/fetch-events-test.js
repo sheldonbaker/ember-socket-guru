@@ -3,8 +3,10 @@ import { module, test } from 'qunit';
 
 module('Unit | Utility | extract events');
 
-const payload = [{ john: ['eat'] },
-                 { jack: ['run', 'sleep'] }];
+const payload = [
+  { john: ['eat'] },
+  { jack: ['run', 'sleep'] },
+];
 
 test('properly fetch johns events', function(assert) {
   assert.deepEqual(['eat'], fetchEvents(payload, 'john'));
