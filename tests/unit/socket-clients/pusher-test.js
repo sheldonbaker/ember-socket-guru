@@ -5,20 +5,14 @@ import sinon from 'sinon';
 module('Unit | Socket Clients | pusher');
 
 const getPusherStub = (
-  bindSpy = function() {},
-  subscribeSpy = function() {},
-  unsubscribeSpy = function() {},
-  disconnectSpy = function() {}
-) => {
-  const pusherStub = class {};
-  pusherStub.prototype = {
-    subscribe: subscribeSpy,
-    unsubscribe: unsubscribeSpy,
-    disconnect: disconnectSpy,
-    connection: { bind: bindSpy },
-  };
-
-  return pusherStub;
+  bind = () => {},
+  subscribe = () => {},
+  unsubscribe = () => {},
+  disconnect = () => {}
+) => function() {
+  Object.assign(this, {
+    subscribe, unsubscribe, disconnect, connection: { bind },
+  });
 };
 
 test('it verifies required config options', function(assert) {
