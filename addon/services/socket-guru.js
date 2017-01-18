@@ -65,9 +65,7 @@ export default Service.extend(Evented, {
   willDestroy() {
     this._super(...arguments);
     const client = get(this, 'client');
-    if (client) {
-      client.unsubscribe();
-    }
+    if (client) client.disconnect();
   },
 
   /**
@@ -79,7 +77,11 @@ export default Service.extend(Evented, {
   setup() {
     const socketClient = get(this, 'socketClientLookup')(getOwner(this), get(this, 'socketClient'));
     set(this, 'client', socketClient);
-    get(this, 'client').setup(get(this, 'config'));
+    get(this, 'client').setup(
+      get(this, 'pusherKey'),
+      get(this, 'config'),
+      this._handleEvent.bind(this)
+    );
     get(this, 'client').subscribe(get(this, 'observedChannels'));
   },
 
@@ -110,5 +112,9 @@ export default Service.extend(Evented, {
     } = channelsDiff(oldChannelsData, newChannelsData);
     get(this, 'client').subscribe(channelsToSubscribe);
     get(this, 'client').unsubscribeChannels(channelsToUnsubscribe);
+  },
+
+  _handleEvent(event, data) {
+    this.trigger('newEvent', event, data);
   },
 });
