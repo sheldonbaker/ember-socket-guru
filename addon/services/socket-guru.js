@@ -78,7 +78,6 @@ export default Service.extend(Evented, {
     const socketClient = get(this, 'socketClientLookup')(getOwner(this), get(this, 'socketClient'));
     set(this, 'client', socketClient);
     get(this, 'client').setup(
-      get(this, 'pusherKey'),
       get(this, 'config'),
       this._handleEvent.bind(this)
     );

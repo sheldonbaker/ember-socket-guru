@@ -21,14 +21,14 @@ test('it verifies required config options', function(assert) {
   });
 
   assert.throws(() => {
-    client.setup();
+    client.setup({});
   }, /need to provide pusher key/, 'it throws when no pusherKey present');
 
   const pusherInstance = window.Pusher;
   window.Pusher = null;
 
   assert.throws(() => {
-    client.setup('FOO_KEY');
+    client.setup({ pusherKey: 'FOO_KEY' });
   }, /need to include the pusher library/, 'it throws when pusher not installed');
 
   window.Pusher = pusherInstance;

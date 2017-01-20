@@ -22,8 +22,8 @@ export default Mixin.create({
   _handleEvent(event, data) {
     const method = this._getEventMethod(event);
     if (method) return method(data);
-    if (this.onPusherAction && this.onPusherAction.apply) {
-      this.onPusherAction(event, data);
+    if (this.onSocketAction && this.onSocketAction.apply) {
+      this.onSocketAction(event, data);
     }
   },
 

@@ -5,9 +5,9 @@ const { get, getProperties, assert, setProperties } = Ember;
 export default Ember.Object.extend({
   ioService: io,
 
-  setup(host, eventHandler) {
-    this._checkConfig(host);
-    const socket = get(this, 'ioService')(host);
+  setup(config, eventHandler) {
+    this._checkConfig(config);
+    const socket = get(this, 'ioService')(get(config, 'host'));
     setProperties(this, { socket, eventHandler });
     socket.connect();
   },
@@ -25,10 +25,10 @@ export default Ember.Object.extend({
     get(this, 'socket').disconnect();
   },
 
-  _checkConfig(host) {
+  _checkConfig(config) {
     assert(
       '[ember-sockets-guru] You need to provide host in the socket-guru service',
-      !!host
+      !!get(config, 'host')
     );
     assert(
       `

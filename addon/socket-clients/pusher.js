@@ -9,12 +9,12 @@ export default Ember.Object.extend({
   socket: null,
   eventHandler: null,
 
-  setup(pusherKey, config, eventHandler) {
+  setup(config, eventHandler) {
     const PusherService = get(this, 'pusherService');
-    this._checkConfig(pusherKey, config);
+    this._checkConfig(config);
     setProperties(this, {
       eventHandler,
-      socket: new PusherService(pusherKey, config),
+      socket: new PusherService(config.pusherKey, config),
     });
 
     get(this, 'socket').connection
@@ -60,10 +60,10 @@ export default Ember.Object.extend({
     });
   },
 
-  _checkConfig(pusherKey) {
+  _checkConfig(config) {
     assert(
       '[ember-sockets-guru] You need to provide pusher key in the socket-guru service',
-      !!pusherKey
+      !config || !!config.pusherKey
     );
     assert(
       '[ember-sockets-guru] You need to include the pusher library',

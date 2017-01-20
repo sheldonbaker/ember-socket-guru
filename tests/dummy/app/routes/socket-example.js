@@ -1,10 +1,11 @@
 import Ember from 'ember';
 import SocketEventHandler from 'ember-socket-guru/mixins/socket-event-handler';
 
-const { Route } = Ember;
+const { Route, inject: { service } } = Ember;
 
 export default Route.extend(SocketEventHandler, {
-  onPusherAction(action, data) {
+  socketGuru: service('socket-guru-socketio'),
+  onSocketAction(action, data) {
     console.log('asd', action, data);
   },
 });
