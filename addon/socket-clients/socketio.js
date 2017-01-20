@@ -4,6 +4,8 @@ const { get, getProperties, assert, setProperties } = Ember;
 
 export default Ember.Object.extend({
   ioService: io,
+  // There's no concept of unsubscribing channels in socket.io
+  unsubscribeChannels: Ember.K,
 
   setup(config, eventHandler) {
     this._checkConfig(config);
@@ -15,10 +17,6 @@ export default Ember.Object.extend({
   subscribe(observedChannels) {
     const { socket, eventHandler } = getProperties(this, 'socket', 'eventHandler');
     observedChannels.forEach(eventName => socket.on(eventName, eventHandler));
-  },
-
-  unsubscribeChannels() {
-    return true;
   },
 
   disconnect() {
