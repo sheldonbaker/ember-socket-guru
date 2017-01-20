@@ -6,7 +6,8 @@ module.exports = {
   },
   extends: 'netguru-ember',
   globals: {
-    "Pusher": true,
+    Pusher: true,
+    io: true,
   },
   env: {
     browser: true

@@ -9,6 +9,7 @@ const Router = Ember.Router.extend({
 /* eslint-disable array-callback-return */
 Router.map(function() {
   this.route('pusher-example');
+  this.route('socket-example');
 });
 /* eslint-enable */
 

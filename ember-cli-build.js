@@ -9,6 +9,7 @@ module.exports = function(defaults) {
   });
 
   app.import('bower_components/pusher/dist/web/pusher.js');
+  app.import('bower_components/socket.io-client/dist/socket.io.js');
   if (app.env === 'test') {
     app.import('bower_components/pusher-test-stub/build/bin/pusher-test-stub.js');
   }

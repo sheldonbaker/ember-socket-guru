@@ -1,10 +1,9 @@
 import SocketGuru from 'ember-socket-guru/services/socket-guru';
 
 export default SocketGuru.extend({
-  socketClient: 'pusher',
+  socketClient: 'socketio',
   config: {
+    host: 'http://localhost:3000',
   },
-  observedChannels: [
-    { channel1: ['event1'] },
-  ],
+  observedChannels: ['test-event'],
 });

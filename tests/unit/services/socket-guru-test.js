@@ -1,10 +1,11 @@
-import { moduleFor, test } from 'ember-qunit';
+import SocketGuruService from 'ember-socket-guru/services/socket-guru';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 import Ember from 'ember';
 
 const { get, run } = Ember;
 
-moduleFor('service:socket-guru', 'Unit | Service | socket guru');
+module('Unit | Service | socket guru');
 
 const socketClient = (
   setupSpy = function() {},
@@ -24,7 +25,7 @@ test('setup function', function(assert) {
   const client = socketClient(setupSpy, function() {}, disconnectSpy);
   const socketClientLookupSpy = sinon.spy(() => client);
   const config = { setting: 'FOO' };
-  const service = this.subject({
+  const service = SocketGuruService.create({
     pusherKey: 'FOO',
     config,
     socketClient: 'pusher',
@@ -36,8 +37,8 @@ test('setup function', function(assert) {
   assert.deepEqual(get(service, 'client'), client, 'it sets the client properly');
   assert.ok(setupSpy.calledOnce, 'it calls the setup function on socketClient');
   assert.deepEqual(
-    setupSpy.args[0].slice(0, 2),
-    ['FOO', config],
+    setupSpy.args[0][0],
+    config,
     'it calls the setup function on socketClient passing the config'
   );
 
@@ -57,7 +58,7 @@ test('it delegates subscription to socketClient', function(assert) {
       { channel1: ['event1'] },
   ];
   const socketClientLookup = () => socketClient(function() {}, subscribeSpy);
-  this.subject({
+  SocketGuruService.create({
     autoConnect: true,
     observedChannels,
     socketClientLookup,
@@ -76,7 +77,7 @@ test('it calls subscribe on socketClient only if autoConnect true', function(ass
   const subscribeSpy = sinon.spy();
   const setupSpy = sinon.spy();
   const socketClientLookup = () => socketClient(setupSpy, subscribeSpy);
-  this.subject({
+  SocketGuruService.create({
     socketClientLookup,
     socketClient: 'pusher',
   });
@@ -91,7 +92,7 @@ test('it doesnt call subscribe on on socketClient if autoConnect false', functio
   const subscribeSpy = sinon.spy();
   const setupSpy = sinon.spy();
   const socketClientLookup = () => socketClient(setupSpy, subscribeSpy);
-  this.subject({
+  SocketGuruService.create({
     autoConnect: false,
     socketClientLookup,
     socketClient: 'pusher',
@@ -111,7 +112,7 @@ test('adding observed channels', function(assert) {
       function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
     );
   };
-  const service = this.subject({
+  const service = SocketGuruService.create({
     client: socketClientLookup(),
     autoConnect: false,
     observedChannels: [{ oldChannel: ['oldData'] }],
@@ -137,7 +138,7 @@ test('updating existing channels', function(assert) {
       function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
     );
   };
-  const service = this.subject({
+  const service = SocketGuruService.create({
     client: socketClientLookup(),
     autoConnect: false,
     observedChannels: [{ oldChannel: ['oldData'] }],
@@ -170,7 +171,7 @@ test('removing channels', function(assert) {
       function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
     );
   };
-  const service = this.subject({
+  const service = SocketGuruService.create({
     client: socketClientLookup(),
     autoConnect: false,
     observedChannels: [{ oldChannel: ['oldData'] }, { oldChannel2: ['oldEvent2'] }],
