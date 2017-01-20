@@ -19,7 +19,7 @@ test('verifies required socket.io config options', function(assert) {
   const client = SocketIOClient.create();
 
   assert.throws(() => {
-    client.setup();
+    client.setup({});
   }, /need to provide host/, 'it throws when no host present');
 });
 
@@ -29,7 +29,7 @@ test('verifies socketio client library passed in', function(assert) {
   });
 
   assert.throws(
-    () => client.setup('http://locahost:1234'),
+    () => client.setup({ host: 'http://locahost:1234' }),
     /need to make sure the socket.io client library/,
     'it throws when socketio client not installed'
   );
@@ -45,7 +45,7 @@ test('setup function', function(assert) {
     ioService: ioStub,
   });
 
-  client.setup('http://localhost:1234', eventHandlerSpy);
+  client.setup({ host: 'http://localhost:1234' }, eventHandlerSpy);
 
   assert.ok(ioStub.calledOnce);
   assert.equal(ioStub.args[0][0], 'http://localhost:1234');
@@ -62,7 +62,7 @@ test('subscribe method', function(assert) {
 
   const handlerSpy = sinon.spy().bind(this);
 
-  client.setup('foo', handlerSpy);
+  client.setup({ host: 'foo' }, handlerSpy);
   client.subscribe(['event1', 'event2']);
 
   const [firstCallArgs, secondCallArgs] = onSpy.args;
@@ -77,7 +77,7 @@ test('disconnect method', function(assert) {
     ioService: createIoStub(sinon.spy(), sinon.spy(), disconnectSpy),
   });
 
-  client.setup('host', sinon.spy());
+  client.setup({ host: 'host' }, sinon.spy());
   client.disconnect();
 
   assert.ok(disconnectSpy.calledOnce);
