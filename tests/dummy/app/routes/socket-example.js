@@ -6,6 +6,6 @@ const { Route, inject: { service } } = Ember;
 export default Route.extend(SocketEventHandler, {
   socketGuru: service('socket-guru-socketio'),
   onSocketAction(action, data) {
-    console.log('asd', action, data);
+    console.log('socket action', action, data);
   },
 });
