@@ -22,7 +22,7 @@ export default Mixin.create({
   _handleEvent(event, data) {
     const method = this._getEventMethod(event);
     if (method) return method(data);
-    if (this.onSocketAction && this.onSocketAction.apply) {
+    if (this.onSocketAction && this.onSocketAction.constructor === Function) {
       this.onSocketAction(event, data);
     }
   },
