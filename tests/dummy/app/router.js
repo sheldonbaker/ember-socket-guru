@@ -10,6 +10,7 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('pusher-example');
   this.route('socket-example');
+  this.route('phoenix-example');
 });
 /* eslint-enable */
 
