@@ -19,7 +19,7 @@ const getPhoenixStub = (
 test('verifies required config options', function(assert) {
   const connectSpy = sinon.spy();
   const client = PhoenixClient.create({
-    ChannelService: getPhoenixStub(connectSpy),
+    Socket: getPhoenixStub(connectSpy),
   });
 
   assert.throws(() => {
@@ -30,7 +30,7 @@ test('verifies required config options', function(assert) {
 test('setup method', function(assert) {
   const connectSpy = sinon.spy();
   const client = PhoenixClient.create({
-    ChannelService: getPhoenixStub(connectSpy),
+    Socket: getPhoenixStub(connectSpy),
   });
   const eventHandlerSpy = sinon.spy();
 
@@ -47,12 +47,12 @@ test('subscribe method', function(assert) {
   const connectSpy = sinon.spy();
   const onSpy = sinon.spy();
   const joinSpy = sinon.spy();
-  const channelSpy = sinon.spy(() => ({
+  const channelStub = sinon.stub().returns({
     on: onSpy,
     join: joinSpy,
-  }));
+  });
   const client = PhoenixClient.create({
-    ChannelService: getPhoenixStub(connectSpy, () => {}, channelSpy),
+    Socket: getPhoenixStub(connectSpy, () => {}, channelStub),
   });
 
   client.setup({ host: 'http://localhost:3000' });
@@ -77,13 +77,13 @@ test('subscribe method', function(assert) {
 
 test('unsubscribeChannels method', function(assert) {
   const leaveSpy = sinon.spy();
-  const channelSpy = sinon.spy(() => ({
+  const channelStub = sinon.stub().returns({
     on() {},
     join() {},
     leave: leaveSpy,
-  }));
+  });
   const client = PhoenixClient.create({
-    ChannelService: getPhoenixStub(() => {}, () => {}, channelSpy),
+    Socket: getPhoenixStub(() => {}, () => {}, channelStub),
   });
 
   client.setup({ host: 'http://localhost:3000' });
@@ -99,7 +99,7 @@ test('unsubscribeChannels method', function(assert) {
 test('disconnect method', function(assert) {
   const disconnectSpy = sinon.spy();
   const client = PhoenixClient.create({
-    ChannelService: getPhoenixStub(() => {}, disconnectSpy),
+    Socket: getPhoenixStub(() => {}, disconnectSpy),
   });
   client.setup({ host: 'http://localhost:3000' });
   client.disconnect();

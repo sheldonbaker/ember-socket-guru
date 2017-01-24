@@ -5,12 +5,12 @@ import fetchEvents from 'ember-socket-guru/util/fetch-events';
 const { get, set, setProperties, assert, run } = Ember;
 
 export default Ember.Object.extend({
-  ChannelService: Socket,
+  Socket,
   joinedChannels: {},
 
   setup(config, eventHandler) {
     this._checkConfig(config);
-    const SocketService = get(this, 'ChannelService');
+    const SocketService = get(this, 'Socket');
     const socket = new SocketService(get(config, 'host'));
     socket.connect();
     setProperties(this, { socket, eventHandler });
