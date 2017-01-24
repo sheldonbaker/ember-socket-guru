@@ -62,9 +62,7 @@ test('subscribe method', function(assert) {
   });
 
   client.setup({ pusherKey: 'foo' });
-  client.subscribe([
-    { channel1: ['event1'] },
-  ]);
+  client.subscribe({ channel1: ['event1'] });
 
   assert.ok(subscribeSpy.calledOnce, 'it calls subscribe on pusher');
   assert.equal(
@@ -91,9 +89,9 @@ test('unsubscribe method', function(assert) {
   });
 
   client.setup({ pusherKey: 'foo' });
-  client.unsubscribeChannels([
-    { channel1: ['event1'] },
-  ]);
+  client.unsubscribeChannels({
+    channel1: ['event1'],
+  });
 
   assert.ok(unsubscribeSpy.calledOnce, 'it calls unsubscribe on pusher client');
   assert.equal(

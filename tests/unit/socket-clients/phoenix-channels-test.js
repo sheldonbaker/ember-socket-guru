@@ -56,10 +56,10 @@ test('subscribe method', function(assert) {
   });
 
   client.setup({ host: 'http://localhost:3000' });
-  client.subscribe([
-    { channel1: ['event1', 'event2'] },
-    { channel2: ['event3'] },
-  ]);
+  client.subscribe({
+    channel1: ['event1', 'event2'],
+    channel2: ['event3'],
+  });
 
   assert.equal(joinSpy.callCount, 2, 'it calls join for every channel');
   assert.equal(onSpy.callCount, 3, 'it calls on for every event');
@@ -87,12 +87,12 @@ test('unsubscribeChannels method', function(assert) {
   });
 
   client.setup({ host: 'http://localhost:3000' });
-  client.subscribe([
-    { channel1: ['event1'] },
-  ]);
-  client.unsubscribeChannels([
-    { channel1: ['event1'] },
-  ]);
+  client.subscribe(
+    { channel1: ['event1'] }
+  );
+  client.unsubscribeChannels(
+    { channel1: ['event1'] }
+  );
   assert.ok(leaveSpy.calledOnce);
 });
 

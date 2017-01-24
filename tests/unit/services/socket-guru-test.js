@@ -54,9 +54,9 @@ test('setup function', function(assert) {
 
 test('it delegates subscription to socketClient', function(assert) {
   const subscribeSpy = sinon.spy();
-  const observedChannels = [
-      { channel1: ['event1'] },
-  ];
+  const observedChannels = {
+    channel1: ['event1'],
+  };
   const socketClientLookup = () => socketClient(function() {}, subscribeSpy);
   SocketGuruService.create({
     autoConnect: true,
@@ -115,7 +115,7 @@ test('adding observed channels', function(assert) {
   const service = SocketGuruService.create({
     client: socketClientLookup(),
     autoConnect: false,
-    observedChannels: [{ oldChannel: ['oldData'] }],
+    observedChannels: { oldChannel: ['oldData'] },
     socketClient: 'pusher',
   });
 
@@ -125,7 +125,7 @@ test('adding observed channels', function(assert) {
   assert.ok(subscribeSpy.calledOnce, 'it calls the subscribe method on the client');
   assert.deepEqual(
     subscribeSpy.args[0][0],
-    [channelsToAdd],
+    channelsToAdd,
     'it passes proper arguments to the client'
   );
 });
@@ -141,24 +141,24 @@ test('updating existing channels', function(assert) {
   const service = SocketGuruService.create({
     client: socketClientLookup(),
     autoConnect: false,
-    observedChannels: [{ oldChannel: ['oldData'] }],
+    observedChannels: { oldChannel: ['oldData'] },
     socketClient: 'pusher',
   });
 
   const channelsToUpdate = { testChannel: ['event1'] };
-  service.updateObservedChannels([channelsToUpdate]);
+  service.updateObservedChannels(channelsToUpdate);
 
   assert.ok(subscribeSpy.calledOnce, 'it calls the subscribe method on the client');
   assert.deepEqual(
     subscribeSpy.args[0][0],
-    [channelsToUpdate],
+    channelsToUpdate,
     'it passes proper channels to unsubscribe'
   );
 
   assert.ok(unsubscribeChannelsSpy.calledOnce, 'it calls the unsubscribe method on the client');
   assert.deepEqual(
     unsubscribeChannelsSpy.args[0][0],
-    [{ oldChannel: ['oldData'] }],
+    { oldChannel: ['oldData'] },
     'it passes proper channels for the client to unsubscribe'
   );
 });
@@ -174,7 +174,7 @@ test('removing channels', function(assert) {
   const service = SocketGuruService.create({
     client: socketClientLookup(),
     autoConnect: false,
-    observedChannels: [{ oldChannel: ['oldData'] }, { oldChannel2: ['oldEvent2'] }],
+    observedChannels: { oldChannel: ['oldData'], oldChannel2: ['oldEvent2'] },
     socketClient: 'pusher',
   });
 
