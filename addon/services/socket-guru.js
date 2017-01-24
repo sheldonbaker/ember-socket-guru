@@ -8,7 +8,6 @@ const {
   set,
   getOwner,
   Evented,
-  isArray,
 } = Ember;
 
 export default Service.extend(Evented, {
@@ -86,9 +85,7 @@ export default Service.extend(Evented, {
 
   addObservedChannels(newObservedChannels) {
     const channelData = get(this, 'observedChannels');
-    const updatedChannelsData = isArray(newObservedChannels)
-      ? [...channelData, ...newObservedChannels]
-      : [...channelData, newObservedChannels];
+    const updatedChannelsData = { ...channelData, ...newObservedChannels };
     this._manageChannelsChange(channelData, updatedChannelsData);
   },
 

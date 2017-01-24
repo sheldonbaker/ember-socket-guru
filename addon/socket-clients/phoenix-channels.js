@@ -1,6 +1,5 @@
 import { Socket } from 'phoenix';
 import Ember from 'ember';
-import fetchEvents from 'ember-socket-guru/util/fetch-events';
 
 const { get, set, setProperties, assert, run } = Ember;
 
@@ -17,15 +16,14 @@ export default Ember.Object.extend({
   },
 
   subscribe(observedChannels) {
-    observedChannels.forEach((singleChannel) => {
-      const channelName = Object.keys(singleChannel)[0];
+    Object.keys(observedChannels).forEach((channelName) => {
       const channel = get(this, 'socket').channel(channelName);
       const joinedChannels = get(this, 'joinedChannels');
       channel.join();
       set(this, 'joinedChannels', Object.assign({}, joinedChannels, {
         [channelName]: channel,
       }));
-      this._attachEventsToChannel(channel, channelName, observedChannels);
+      this._attachEventsToChannel(channel, channelName, observedChannels[channelName]);
     });
   },
 
@@ -34,8 +32,7 @@ export default Ember.Object.extend({
   },
 
   unsubscribeChannels(channelsToUnsubscribe) {
-    channelsToUnsubscribe
-      .map(channel => Object.keys(channel)[0])
+    Object.keys(channelsToUnsubscribe)
       .forEach(channel => get(this, `joinedChannels.${channel}`).leave());
   },
 
@@ -46,14 +43,11 @@ export default Ember.Object.extend({
     );
   },
 
-  _attachEventsToChannel(channel, channelName, data) {
-    fetchEvents(data, channelName)
-      .forEach((event) => this._setEvent(channel, event));
-  },
-
-  _setEvent(channel, event) {
-    channel.on(event, (data) => {
-      run(() => get(this, 'eventHandler')(event, data));
+  _attachEventsToChannel(channel, channelName, events) {
+    events.forEach((event) => {
+      channel.on(event, (data) => {
+        run(() => get(this, 'eventHandler')(event, data));
+      });
     });
   },
 });

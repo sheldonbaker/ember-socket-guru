@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import fetchEvents from 'ember-socket-guru/util/fetch-events';
 
 const { get, set, setProperties, $, run, assert } = Ember;
 
@@ -22,16 +21,14 @@ export default Ember.Object.extend({
   },
 
   subscribe(observedChannels) {
-    observedChannels.forEach((singleChannel) => {
-      const channelName = Object.keys(singleChannel)[0];
+    Object.keys(observedChannels).forEach((channelName) => {
       const channel = get(this, 'socket').subscribe(channelName);
-      this._attachEventsToChannel(channel, channelName, observedChannels);
+      this._attachEventsToChannel(channel, channelName, observedChannels[channelName]);
     });
   },
 
   unsubscribeChannels(observedChannels) {
-    observedChannels
-      .map(channel => Object.keys(channel)[0])
+    Object.keys(observedChannels)
       .forEach(channel => get(this, 'socket').unsubscribe(channel));
   },
 
@@ -49,14 +46,11 @@ export default Ember.Object.extend({
     });
   },
 
-  _attachEventsToChannel(channel, channelName, data) {
-    fetchEvents(data, channelName)
-      .forEach((event) => this._setEvent(channel, event));
-  },
-
-  _setEvent(channel, event) {
-    channel.bind(event, (data) => {
-      run(() => get(this, 'eventHandler')(event, data));
+  _attachEventsToChannel(channel, channelName, events) {
+    events.forEach((event) => {
+      channel.bind(event, (data) => {
+        run(() => get(this, 'eventHandler')(event, data));
+      });
     });
   },
 
