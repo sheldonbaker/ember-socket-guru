@@ -1,7 +1,9 @@
 import { Socket } from 'phoenix';
 import Ember from 'ember';
 
-const { get, set, setProperties, assert, run } = Ember;
+const {
+  get, set, setProperties, assert, run, warn,
+} = Ember;
 
 export default Ember.Object.extend({
   Socket,
@@ -27,13 +29,25 @@ export default Ember.Object.extend({
     });
   },
 
-  disconnect() {
-    get(this, 'socket').disconnect();
-  },
-
   unsubscribeChannels(channelsToUnsubscribe) {
     Object.keys(channelsToUnsubscribe)
       .forEach(channel => get(this, `joinedChannels.${channel}`).leave());
+  },
+
+  emit(channelName, eventName, eventData) {
+    const channel = get(this, `joinedChannels.${channelName}`);
+    if (!channel) {
+      return warn(
+        `[ember-socket-guru] You need to join channel ${channelName} before pushing events!`,
+        channel,
+        { id: 'ember-socket-guru.channel-not-joined' }
+      );
+    }
+    channel.push(eventName, eventData);
+  },
+
+  disconnect() {
+    get(this, 'socket').disconnect();
   },
 
   _checkConfig(config) {

@@ -109,6 +109,10 @@ export default Service.extend(Evented, {
     this._manageChannelsChange(get(this, 'observedChannels'), newObservedChannels);
   },
 
+  emit(eventName, eventData) {
+    get(this, 'client').emit(eventName, eventData);
+  },
+
   _manageChannelsChange(oldChannelsData, newChannelsData) {
     const {
       channelsToSubscribe,
