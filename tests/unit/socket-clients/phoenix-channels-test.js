@@ -96,6 +96,20 @@ test('unsubscribeChannels method', function(assert) {
   assert.ok(leaveSpy.calledOnce);
 });
 
+test('emit method', function(assert) {
+  const pushSpy = sinon.spy();
+  const client = PhoenixClient.create({
+    joinedChannels: {
+      channel1: { push: pushSpy },
+    },
+  });
+
+  const args = ['channel1', 'testEvent', { testData: 'foo' }];
+  client.emit(...args);
+
+  assert.ok(pushSpy.calledOnce);
+});
+
 test('disconnect method', function(assert) {
   const disconnectSpy = sinon.spy();
   const client = PhoenixClient.create({

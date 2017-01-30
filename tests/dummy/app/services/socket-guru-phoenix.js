@@ -5,7 +5,7 @@ export default SocketGuru.extend({
   config: {
     host: 'ws://localhost:4000/socket',
   },
-  observedChannels: [
-    { 'event:lobby': ['new_msg'] },
-  ],
+  observedChannels: {
+    'event:lobby': ['new_msg'],
+  },
 });
