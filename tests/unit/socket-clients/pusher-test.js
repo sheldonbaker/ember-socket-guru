@@ -1,6 +1,9 @@
 import PusherClient from 'ember-socket-guru/socket-clients/pusher';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
+import Ember from 'ember';
+
+const { get } = Ember;
 
 module('Unit | Socket Clients | pusher');
 
@@ -115,4 +118,40 @@ test('disconnect method', function(assert) {
   client.disconnect();
 
   assert.ok(disconnectSpy.calledOnce, 'disconnect is called on pusher instance');
+});
+
+test('it stores list of joined channels', function(assert) {
+  const channels = {
+    channel1: ['event1'],
+    channel2: ['event2'],
+  };
+  const subscribeSpy = sinon.spy(() => ({
+    bind() {},
+  }));
+  const client = PusherClient.create({
+    pusherService: getPusherStub(sinon.spy(), subscribeSpy),
+  });
+
+  client.setup({ pusherKey: 'foo' });
+  client.subscribe(channels);
+  assert.deepEqual(Object.keys(get(client, 'joinedChannels')), Object.keys(channels));
+});
+
+test('emit method', function(assert) {
+  const triggerSpy = sinon.spy();
+  const subscribeSpy = sinon.spy(() => ({
+    bind() {},
+    trigger: triggerSpy,
+  }));
+  const client = PusherClient.create({
+    pusherService: getPusherStub(sinon.spy(), subscribeSpy),
+  });
+
+  client.setup({ pusherKey: 'foo' });
+  client.subscribe({ channel1: ['event1'] });
+  const eventData = { foo: 'bar' };
+  const emitArguments = ['event-name', eventData];
+  client.emit('channel1', ...emitArguments);
+  assert.ok(triggerSpy.calledOnce);
+  assert.deepEqual(triggerSpy.args[0], emitArguments);
 });
