@@ -8,7 +8,7 @@ export default Controller.extend(SocketEventHandler, {
   socketGuru: service('socket-guru-socketio'),
 
   actions: {
-    onButtonClick() {
+    emitClickEvent() {
       get(this, 'socketGuru').emit('button-click', {});
     },
   },
