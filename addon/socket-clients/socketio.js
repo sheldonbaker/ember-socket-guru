@@ -19,6 +19,11 @@ export default Ember.Object.extend({
     observedChannels.forEach(eventName => socket.on(eventName, eventHandler));
   },
 
+  emit(eventName, eventData) {
+    const socket = get(this, 'socket');
+    socket.emit(eventName, eventData);
+  },
+
   disconnect() {
     get(this, 'socket').disconnect();
   },

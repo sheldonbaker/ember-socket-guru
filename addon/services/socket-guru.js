@@ -1,13 +1,20 @@
 import Ember from 'ember';
 import socketClientLookup from 'ember-socket-guru/util/socket-client-lookup';
+import {
+  verifyArrayStructure,
+  verifyObjectStructure,
+} from 'ember-socket-guru/util/structure-checker';
 import { channelsDiff, removeChannel } from 'ember-socket-guru/util/channels-diff';
 
 const {
+  assert,
   Service,
   get,
+  getProperties,
   set,
   getOwner,
   Evented,
+  isArray,
 } = Ember;
 
 export default Service.extend(Evented, {
@@ -75,6 +82,7 @@ export default Service.extend(Evented, {
    */
   setup() {
     const socketClient = get(this, 'socketClientLookup')(getOwner(this), get(this, 'socketClient'));
+    this._checkOptions();
     set(this, 'client', socketClient);
     get(this, 'client').setup(
       get(this, 'config'),
@@ -101,6 +109,10 @@ export default Service.extend(Evented, {
     this._manageChannelsChange(get(this, 'observedChannels'), newObservedChannels);
   },
 
+  emit(eventName, eventData) {
+    get(this, 'client').emit(eventName, eventData);
+  },
+
   _manageChannelsChange(oldChannelsData, newChannelsData) {
     const {
       channelsToSubscribe,
@@ -112,5 +124,37 @@ export default Service.extend(Evented, {
 
   _handleEvent(event, data) {
     this.trigger('newEvent', event, data);
+  },
+
+  _checkOptions() {
+    const {
+      observedChannels,
+      socketClient,
+    } = getProperties(this, 'observedChannels', 'socketClient');
+
+    assert('[ember-socket-guru] You must provide observed channels/events', !!observedChannels);
+    this._checkStructure();
+    assert(
+      '[ember-socket-guru] You must provide socketClient property for socket-guru service.',
+      !!socketClient
+    );
+  },
+
+  _checkStructure() {
+    const {
+      socketClient, observedChannels,
+    } = getProperties(this, 'socketClient', 'observedChannels');
+
+    if (!isArray(observedChannels)) {
+      assert(
+        '[ember-socket-guru] observedChannels property must have correct structure.',
+        socketClient !== 'socketio' && verifyObjectStructure(observedChannels)
+      );
+    } else {
+      assert(
+        '[ember-socket-guru] observedChannels must have correct structure (array of events)',
+        socketClient === 'socketio' && verifyArrayStructure(observedChannels)
+      );
+    }
   },
 });

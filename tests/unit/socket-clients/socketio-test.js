@@ -10,9 +10,10 @@ module('Unit | Socket Clients | socketio');
 const createIoStub = (
   connect = () => {},
   on = () => {},
-  disconnect = () => {}
+  disconnect = () => {},
+  emit = () => {}
 ) => {
-  return () => ({ connect, on, disconnect });
+  return () => ({ connect, on, disconnect, emit });
 };
 
 test('verifies required socket.io config options', function(assert) {
@@ -81,4 +82,20 @@ test('disconnect method', function(assert) {
   client.disconnect();
 
   assert.ok(disconnectSpy.calledOnce);
+});
+
+test('emit method', function(assert) {
+  const emitSpy = sinon.spy();
+  const client = SocketIOClient.create({
+    ioService: createIoStub(
+      sinon.spy(), sinon.spy(), sinon.spy(), emitSpy
+    ),
+  });
+
+  client.setup({ host: 'host' }, sinon.spy());
+  const args = ['fooEvent', { fooKey: 'fooValue' }];
+  client.emit(...args);
+
+  assert.ok(emitSpy.calledOnce, 'it calls sockets emit method');
+  assert.deepEqual(emitSpy.args[0], args, 'it passes in proper arguments');
 });

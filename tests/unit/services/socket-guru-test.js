@@ -29,6 +29,7 @@ test('setup function', function(assert) {
     pusherKey: 'FOO',
     config,
     socketClient: 'pusher',
+    observedChannels: { channel1: ['event1'] },
     socketClientLookup: socketClientLookupSpy,
   });
 
@@ -79,6 +80,7 @@ test('it calls subscribe on socketClient only if autoConnect true', function(ass
   const socketClientLookup = () => socketClient(setupSpy, subscribeSpy);
   SocketGuruService.create({
     socketClientLookup,
+    observedChannels: { channel1: ['event1'] },
     socketClient: 'pusher',
   });
 
@@ -181,4 +183,96 @@ test('removing channels', function(assert) {
   service.removeObservedChannel('oldChannel');
 
   assert.ok(unsubscribeChannelsSpy.calledOnce, 'it calls the unsubscribe method on the client');
+});
+
+test('it checks the observedChannels structure', function(assert) {
+  const client = socketClient();
+  const socketClientLookup = () => client;
+
+  assert.throws(
+    () => {
+      SocketGuruService.create({
+        socketClientLookup,
+        socketClient: 'pusher',
+        observedChannels: ['event1', 'event2'],
+      });
+    },
+    /must have correct structure/,
+    'it verifies the observed channels structure for pusher'
+  );
+
+  assert.throws(
+    () => {
+      SocketGuruService.create({
+        socketClientLookup,
+        socketClient: 'phoenix-channels',
+        observedChannels: ['event1', 'event2'],
+      });
+    },
+    /must have correct structure/,
+    'it verifies the observed channels structure for phoenix'
+  );
+
+  assert.throws(
+    () => {
+      SocketGuruService.create({
+        socketClientLookup,
+        socketClient: 'socketio',
+        observedChannels: {
+          channel1: ['event1'],
+        },
+      });
+    },
+    /must have correct structure/,
+    'it verifies the observed channels structure for socket'
+  );
+
+  assert.throws(
+    () => {
+      SocketGuruService.create({
+        socketClientLookup,
+        observedChannels: {
+          channel1: ['event1'],
+        },
+      });
+    },
+    /must provide socketClient/,
+    'it verifies the socketClient property presence'
+  );
+
+  assert.throws(
+    () => {
+      SocketGuruService.create({
+        socketClientLookup,
+      });
+    },
+    /must provide observed channels/,
+    'it verifies observed channels presence'
+  );
+
+  assert.throws(
+    () => {
+      SocketGuruService.create({
+        socketClientLookup,
+        socketClient: 'socketio',
+        observedChannels: ['event1', []],
+      });
+    },
+    /must have correct structure/,
+    'it doesnt allow non-string objects as event names'
+  );
+
+  assert.throws(
+    () => {
+      SocketGuruService.create({
+        socketClientLookup,
+        socketClient: 'pusher',
+        observedChannels: {
+          channel1: [],
+        },
+      });
+    },
+    /must have correct structure/,
+    'it doesnt allow channels without any events'
+  );
 });

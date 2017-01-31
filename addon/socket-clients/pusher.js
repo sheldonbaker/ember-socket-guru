@@ -1,12 +1,15 @@
 import Ember from 'ember';
 
-const { get, set, setProperties, $, run, assert } = Ember;
+const {
+  get, set, setProperties, $, run, assert, warn,
+} = Ember;
 
 export default Ember.Object.extend({
   pusherService: Pusher,
   socketId: null,
   socket: null,
   eventHandler: null,
+  joinedChannels: {},
 
   setup(config, eventHandler) {
     const PusherService = get(this, 'pusherService');
@@ -23,6 +26,10 @@ export default Ember.Object.extend({
   subscribe(observedChannels) {
     Object.keys(observedChannels).forEach((channelName) => {
       const channel = get(this, 'socket').subscribe(channelName);
+      const joinedChannels = get(this, 'joinedChannels');
+      set(this, 'joinedChannels', Object.assign({}, joinedChannels, {
+        [channelName]: channel,
+      }));
       this._attachEventsToChannel(channel, channelName, observedChannels[channelName]);
     });
   },
@@ -30,6 +37,18 @@ export default Ember.Object.extend({
   unsubscribeChannels(observedChannels) {
     Object.keys(observedChannels)
       .forEach(channel => get(this, 'socket').unsubscribe(channel));
+  },
+
+  emit(channelName, eventName, eventData) {
+    const channel = get(this, `joinedChannels.${channelName}`);
+    if (!channel) {
+      return warn(
+        `[ember-socket-guru] You need to join channel ${channelName} before pushing events!`,
+        channel,
+        { id: 'ember-socket-guru.channel-not-joined' }
+      );
+    }
+    channel.trigger(eventName, eventData);
   },
 
   disconnect() {
