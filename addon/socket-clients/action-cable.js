@@ -24,8 +24,9 @@ export default Ember.Object.extend({
   },
 
   subscribe(channels) {
-    const { actionCable, eventHandler, joinedChannels }
-      = getProperties(this, 'actionCable', 'eventHandler', 'joinedChannels');
+    const {
+      actionCable, eventHandler, joinedChannels,
+    } = getProperties(this, 'actionCable', 'eventHandler', 'joinedChannels');
     const newChannels = Object.assign({}, joinedChannels);
 
     channels.forEach((channel) => {
@@ -50,7 +51,14 @@ export default Ember.Object.extend({
 
   emit(channelName, data) {
     const joinedChannel = get(this, `joinedChannels.${channelName}`);
-    if (joinedChannel) joinedChannel.send(data);
+    if (joinedChannel) {
+      joinedChannel.send(data);
+    } else {
+      assert(
+      '[ember-sockets-guru] You were trying to emit message to unsubscribed channel',
+      false
+    );
+    }
   },
 
   unsubscribeChannels(channels) {

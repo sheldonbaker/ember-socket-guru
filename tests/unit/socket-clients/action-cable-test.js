@@ -107,3 +107,14 @@ test('sending data to websocket', function(assert) {
     get(subject, 'actionCableService').Subscription.prototype.send.calledOnce
   );
 });
+
+test('sending data to unsubscribed channel', function(assert) {
+  const subject = ActionCableClient.create();
+  const goodChannel = 'good place';
+  const wrongChannel = 'wrong place';
+  const testMessage = 'Lorem ipsum';
+
+  subject.setup(testConfig, K);
+  subject.subscribe(Array(goodChannel));
+  assert.throws(() => subject.emit(wrongChannel, testMessage));
+});
