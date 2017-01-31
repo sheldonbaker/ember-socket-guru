@@ -55,6 +55,7 @@ test('subscription to channels and handling events', function(assert) {
 
 test('unsubscription from channels', function(assert) {
   const subject = ActionCableClient.create();
+  const selectedChannel = testChannels[1];
 
   subject.setup(testConfig);
   subject.subscribe(testChannels);
@@ -63,14 +64,19 @@ test('unsubscription from channels', function(assert) {
     Object.keys(get(subject, 'joinedChannels')).length;
 
   assert.equal(joinedChannelsLength, testChannels.length);
-  subject.unsubscribeChannels();
+  subject.unsubscribeChannels(Array(selectedChannel));
 
   const actionCableService = get(subject, 'actionCableService');
-  assert.equal(
-    actionCableService.Subscription.prototype.unsubscribe.callCount,
-    testChannels.length
+  assert.ok(
+    actionCableService.Subscription.prototype.unsubscribe.calledOnce
   );
-  assert.equal(Object.keys(get(subject, 'joinedChannels')).length, 0);
+  assert.equal(
+    Object.keys(get(subject, 'joinedChannels')).indexOf(selectedChannel), -1
+  );
+  assert.equal(
+    Object.keys(get(subject, 'joinedChannels')).length,
+    testChannels.length - 1
+  );
 });
 
 test('disconnect from websocket', function(assert) {

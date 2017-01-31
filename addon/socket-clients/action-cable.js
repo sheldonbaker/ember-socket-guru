@@ -45,14 +45,20 @@ export default Ember.Object.extend({
     if (joinedChannel) joinedChannel.send(data);
   },
 
-  unsubscribeChannels() {
+  unsubscribeChannels(channels) {
     const joinedChannels = get(this, 'joinedChannels');
 
-    Object.keys(joinedChannels).forEach((channel) => {
-      joinedChannels[channel].unsubscribe();
-    });
+    channels.forEach((channel) => {
+      const selectedChannel = joinedChannels[channel];
 
-    set(this, 'joinedChannels', {});
+      if (selectedChannel) {
+        const newJoinedChannels = Object.assign({}, joinedChannels);
+
+        selectedChannel.unsubscribe();
+        delete newJoinedChannels[channel];
+        set(this, 'joinedChannels', newJoinedChannels);
+      }
+    });
   },
 
   disconnect() {
