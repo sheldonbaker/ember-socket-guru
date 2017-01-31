@@ -11,6 +11,7 @@ module.exports = {
   globals: {
     Pusher: true,
     io: true,
+    ActionCable: true
   },
   env: {
     browser: true
