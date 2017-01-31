@@ -11,6 +11,7 @@ Router.map(function() {
   this.route('pusher-example');
   this.route('socket-example');
   this.route('phoenix-example');
+  this.route('action-cable-example');
 });
 /* eslint-enable */
 
