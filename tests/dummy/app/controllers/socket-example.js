@@ -11,6 +11,10 @@ export default Controller.extend(SocketEventHandler, {
     emitClickEvent() {
       get(this, 'socketGuru').emit('button-click', {});
     },
+
+    addObservedChannels() {
+      get(this, 'socketGuru').addObservedChannels(['event1']);
+    },
   },
 
   onSocketAction(action, data) {

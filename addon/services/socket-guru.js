@@ -5,6 +5,7 @@ import {
   verifyObjectStructure,
 } from 'ember-socket-guru/util/structure-checker';
 import { channelsDiff, removeChannel } from 'ember-socket-guru/util/channels-diff';
+import { eventsDiff, removeEvent } from 'ember-socket-guru/util/events-diff';
 
 const {
   assert,
@@ -93,15 +94,18 @@ export default Service.extend(Evented, {
 
   addObservedChannels(newObservedChannels) {
     const channelData = get(this, 'observedChannels');
-    const updatedChannelsData = { ...channelData, ...newObservedChannels };
+    const updatedChannelsData = this._hasNoChannels()
+      ? [...channelData, ...newObservedChannels]
+      : { ...channelData, ...newObservedChannels };
     this._manageChannelsChange(channelData, updatedChannelsData);
   },
 
   removeObservedChannel(channelName) {
     const observed = get(this, 'observedChannels');
+    const removeFunc = this._hasNoChannels() ? removeEvent : removeChannel;
     this._manageChannelsChange(
       observed,
-      removeChannel(observed, channelName)
+      removeFunc(observed, channelName)
     );
   },
 
@@ -114,10 +118,12 @@ export default Service.extend(Evented, {
   },
 
   _manageChannelsChange(oldChannelsData, newChannelsData) {
+    const diffFunction = this._hasNoChannels() ? eventsDiff : channelsDiff;
     const {
       channelsToSubscribe,
       channelsToUnsubscribe,
-    } = channelsDiff(oldChannelsData, newChannelsData);
+    } = diffFunction(oldChannelsData, newChannelsData);
+
     get(this, 'client').subscribe(channelsToSubscribe);
     get(this, 'client').unsubscribeChannels(channelsToUnsubscribe);
   },
@@ -141,20 +147,22 @@ export default Service.extend(Evented, {
   },
 
   _checkStructure() {
-    const {
-      socketClient, observedChannels,
-    } = getProperties(this, 'socketClient', 'observedChannels');
+    const observedChannels = get(this, 'observedChannels');
 
     if (!isArray(observedChannels)) {
       assert(
         '[ember-socket-guru] observedChannels property must have correct structure.',
-        socketClient !== 'socketio' && verifyObjectStructure(observedChannels)
+        !this._hasNoChannels() && verifyObjectStructure(observedChannels)
       );
     } else {
       assert(
         '[ember-socket-guru] observedChannels must have correct structure (array of events)',
-        socketClient === 'socketio' && verifyArrayStructure(observedChannels)
+        this._hasNoChannels() && verifyArrayStructure(observedChannels)
       );
     }
+  },
+
+  _hasNoChannels() {
+    return get(this, 'socketClient') === 'socketio';
   },
 });
