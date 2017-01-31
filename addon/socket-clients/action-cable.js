@@ -8,8 +8,16 @@ export default Ember.Object.extend({
   eventHandler: null,
   joinedChannels: null,
 
-  setup(config, eventHandler = function() {}) {
-    this._checkConfig(config);
+  setup(config, eventHandler) {
+    assert(
+      '[ember-sockets-guru] You need to provide url in config in the socket-guru service',
+      !!get(config, 'url')
+    );
+    assert(
+      '[ember-sockets-guru] You need to provide eventHandler in the socket-guru service',
+      typeof eventHandler === 'function'
+    );
+
     const url = get(config, 'url');
     const actionCable = get(this, 'actionCableService').createConsumer(url);
     setProperties(this, { actionCable, eventHandler, joinedChannels: {} });
@@ -63,12 +71,5 @@ export default Ember.Object.extend({
 
   disconnect() {
     get(this, 'actionCable').disconnect();
-  },
-
-  _checkConfig(config) {
-    assert(
-      '[ember-sockets-guru] You need to provide url in the socket-guru service',
-      !!get(config, 'url')
-    );
   },
 });

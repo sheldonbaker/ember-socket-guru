@@ -18,7 +18,7 @@ module('Unit | Socket Clients | Action Cable', {
   },
 });
 
-const { get } = Ember;
+const { get, K } = Ember;
 const testConfig = {
   url: 'ws://0.0.0.0:28080',
 };
@@ -29,9 +29,14 @@ test('throw exception if config is not provided', function(assert) {
   assert.throws(() => subject.setup());
 });
 
+test('throw exception if eventHandler is not provided', function(assert) {
+  const subject = ActionCableClient.create();
+  assert.throws(() => subject.setup(testConfig));
+});
+
 test('setup method creates Action Cable connection', function(assert) {
   const subject = ActionCableClient.create();
-  subject.setup(testConfig);
+  subject.setup(testConfig, K);
 
   const actionCableService = get(subject, 'actionCableService');
   assert.ok(actionCableService.createConsumer.calledOnce);
@@ -57,7 +62,7 @@ test('unsubscription from channels', function(assert) {
   const subject = ActionCableClient.create();
   const selectedChannel = testChannels[1];
 
-  subject.setup(testConfig);
+  subject.setup(testConfig, K);
   subject.subscribe(testChannels);
 
   const joinedChannelsLength =
@@ -81,7 +86,7 @@ test('unsubscription from channels', function(assert) {
 
 test('disconnect from websocket', function(assert) {
   const subject = ActionCableClient.create();
-  subject.setup(testConfig);
+  subject.setup(testConfig, K);
   subject.disconnect();
 
   assert.ok(
@@ -94,7 +99,7 @@ test('sending data to websocket', function(assert) {
   const testChannel = testChannels[0];
   const testMessage = 'Lorem ipsum';
 
-  subject.setup(testConfig);
+  subject.setup(testConfig, K);
   subject.subscribe(Array(testChannel));
   subject.emit(testChannel, testMessage);
 
