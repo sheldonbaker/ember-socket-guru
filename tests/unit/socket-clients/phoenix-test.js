@@ -1,4 +1,4 @@
-import PhoenixClient from 'ember-socket-guru/socket-clients/phoenix-channels';
+import PhoenixClient from 'ember-socket-guru/socket-clients/phoenix';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import Ember from 'ember';
@@ -24,7 +24,7 @@ test('verifies required config options', function(assert) {
 
   assert.throws(() => {
     client.setup({});
-  }, /need to provide host/, 'it throws when no host present');
+  }, /need to provide socketAddress/, 'it throws when no socketAddress present');
 });
 
 test('setup method', function(assert) {
@@ -34,7 +34,7 @@ test('setup method', function(assert) {
   });
   const eventHandlerSpy = sinon.spy();
 
-  client.setup({ host: 'http://localhost:3000' }, eventHandlerSpy);
+  client.setup({ socketAddress: 'http://localhost:3000' }, eventHandlerSpy);
   assert.ok(connectSpy.calledOnce, 'it calls connect on the phoenix service');
   assert.equal(
     get(client, 'eventHandler'),
@@ -55,7 +55,7 @@ test('subscribe method', function(assert) {
     Socket: getPhoenixStub(connectSpy, () => {}, channelStub),
   });
 
-  client.setup({ host: 'http://localhost:3000' });
+  client.setup({ socketAddress: 'http://localhost:3000' });
   client.subscribe({
     channel1: ['event1', 'event2'],
     channel2: ['event3'],
@@ -86,7 +86,7 @@ test('unsubscribeChannels method', function(assert) {
     Socket: getPhoenixStub(() => {}, () => {}, channelStub),
   });
 
-  client.setup({ host: 'http://localhost:3000' });
+  client.setup({ socketAddress: 'http://localhost:3000' });
   client.subscribe(
     { channel1: ['event1'] }
   );
@@ -115,7 +115,7 @@ test('disconnect method', function(assert) {
   const client = PhoenixClient.create({
     Socket: getPhoenixStub(() => {}, disconnectSpy),
   });
-  client.setup({ host: 'http://localhost:3000' });
+  client.setup({ socketAddress: 'http://localhost:3000' });
   client.disconnect();
 
   assert.ok(disconnectSpy.calledOnce);

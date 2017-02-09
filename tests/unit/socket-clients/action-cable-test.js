@@ -20,7 +20,7 @@ module('Unit | Socket Clients | Action Cable', {
 
 const { get, K } = Ember;
 const testConfig = {
-  url: 'ws://0.0.0.0:28080',
+  socketAddress: 'ws://0.0.0.0:28080',
 };
 const testChannels = ['cha1', 'cha2', 'cha3'];
 
@@ -40,7 +40,7 @@ test('setup method creates Action Cable connection', function(assert) {
 
   const actionCableService = get(subject, 'actionCableService');
   assert.ok(actionCableService.createConsumer.calledOnce);
-  assert.ok(actionCableService.createConsumer.calledWith(testConfig.url));
+  assert.ok(actionCableService.createConsumer.calledWith(testConfig.socketAddress));
   assert.notEqual(get(subject, 'actionCable'), null);
 });
 
