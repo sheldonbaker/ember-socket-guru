@@ -15,7 +15,7 @@ test('_handleEvent method', function(assert) {
   const funcSpy = sinon.spy();
   const SocketEventHandlerObject = Ember.Object.extend(SocketEventHandlerMixin, {
     socketGuru: socketGuruServiceStub(),
-    pusherActions: {
+    socketActions: {
       event1: funcSpy,
     },
   });

@@ -12,7 +12,7 @@ export default Ember.Object.extend({
   setup(config, eventHandler) {
     this._checkConfig(config);
     const SocketService = get(this, 'Socket');
-    const socket = new SocketService(get(config, 'host'));
+    const socket = new SocketService(get(config, 'socketAddress'));
     socket.connect();
     setProperties(this, { socket, eventHandler });
   },
@@ -52,8 +52,8 @@ export default Ember.Object.extend({
 
   _checkConfig(config) {
     assert(
-      '[ember-sockets-guru] You need to provide host in the socket-guru service',
-      !!get(config, 'host')
+      '[ember-sockets-guru] You need to provide socketAddress in the socket-guru service',
+      !!get(config, 'socketAddress')
     );
   },
 

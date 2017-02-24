@@ -10,16 +10,16 @@ export default Ember.Object.extend({
 
   setup(config, eventHandler) {
     assert(
-      '[ember-sockets-guru] You need to provide url in config in the socket-guru service',
-      !!get(config, 'url')
+      '[ember-sockets-guru] You need to provide socketAddress in config in the socket-guru service',
+      !!get(config, 'socketAddress')
     );
     assert(
       '[ember-sockets-guru] You need to provide eventHandler in the socket-guru service',
       typeof eventHandler === 'function'
     );
 
-    const url = get(config, 'url');
-    const actionCable = get(this, 'actionCableService').createConsumer(url);
+    const socketAddress = get(config, 'socketAddress');
+    const actionCable = get(this, 'actionCableService').createConsumer(socketAddress);
     setProperties(this, { actionCable, eventHandler, joinedChannels: {} });
   },
 
