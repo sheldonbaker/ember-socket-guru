@@ -8,7 +8,7 @@ Addon for easy integration with Pusher.js, ActionCable, Socket.io and Phoenix Ch
 - you can use more than one client at the same time (i.e. Pusher and Phoenix)
 
 ## Contents
-- [Installing](#installing)
+- [Installation](#installation)
 - [Getting Started](#getting-started)
   - [Setting up socket guru service](#setting-up-socket-guru-service)
   - [Usage](#usage)
@@ -23,7 +23,7 @@ Addon for easy integration with Pusher.js, ActionCable, Socket.io and Phoenix Ch
   - [Phoenix](#phoenix)
   - [Action Cable](#action-cable)
 
-## Installing
+## Installation
 `ember install ember-socket-guru`
 
 ## Getting started
