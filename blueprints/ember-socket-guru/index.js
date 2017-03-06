@@ -2,17 +2,29 @@ module.exports = {
   normalizeEntityName() {},
 
   afterInstall() {
-    const blueprint = this;
     const requiredBowerPackages = [
-      ['pusher', '3.1.0'],
-      ['pusher-test-stub', '1.0.0'],
-      ['socket.io-client', '^1.7.2'],
-      ['action-cable', '^5.0.0'],
+      ['pusher', 'Pusher', '3.1.0'],
+      ['pusher-test-stub', 'Pusher Test Stub (required for pusher)', '1.0.0'],
+      ['socket.io-client', 'Socket.io', '^1.7.2'],
+      ['action-cable', 'ActionCable', '^5.0.0'],
     ];
 
-    return Promise.all(requiredBowerPackages.map((pkg) => {
-      const [name, version] = pkg;
-      return blueprint.addBowerPackageToProject(name, version);
-    }));
+    return requiredBowerPackages.reduce((promise, pkg) => {
+      return promise.then(() => {
+        const [name, displayName, version] = pkg;
+        /* eslint-disable netguru-ember/named-functions-in-promises */
+        return this.ui.prompt({
+          type: 'input',
+          name: 'library',
+          message: `Do you want to install ${displayName} library through bower? [Y/n]`,
+        }).then((data) => {
+          if (data.library === 'Y') {
+            console.log(name, version);
+            return this.addBowerPackageToProject(name, version);
+          }
+        });
+        /* eslint-enable */
+      });
+    }, new Promise((resolve) => resolve(true)));
   },
 };
