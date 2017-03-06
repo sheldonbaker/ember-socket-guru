@@ -17,6 +17,7 @@ Addon for easy integration with Pusher.js, ActionCable, Socket.io and Phoenix Ch
 - [Observed Channels Structure](#observed-channels-structure)
   - [Channels and Events](#channels-and-events)
   - [Events Only](#events-only)
+- [Tree Shaking](#tree-shaking)
 - [Socket Clients](#socket-clients)
   - [Pusher](#pusher)
   - [Socket.io](#socketio)
@@ -102,6 +103,22 @@ Unfortunately some implementations do not allow for distinction for events and c
 ```js
 observedChannels: ['event1', 'event2'],
 ```
+
+## Tree shaking
+If you only want to include specific clients (e.g. only pusher), then you can specify it in the settings, like so:
+```js
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    'ember-socket-guru': {
+      includeOnly: ['pusher'],
+    },
+  });
+}
+```
+This will make sure that only pusher client file and needed vendor files are included. **By default all files are included.**
+
+Available keys: `pusher`, `phoenix`, `action-cable`, `socketio`.
+
 ## Socket Clients
 ### Pusher
 **String key:** `pusher`
