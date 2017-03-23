@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/netguru/ember-socket-guru.svg?branch=master)](https://travis-ci.org/netguru/ember-socket-guru)
+
 # Ember-socket-guru
 Addon for easy integration with Pusher.js, ActionCable, Socket.io and Phoenix Channels. Everything conveniently wrapped in one package.
 
