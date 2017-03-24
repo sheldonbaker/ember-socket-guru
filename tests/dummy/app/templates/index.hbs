@@ -1,0 +1,29 @@
+<div class="c-main-page">
+  <div class="container">
+    {{#link-to 'index' class="c-main-page__logo"}}
+      {{svg-jar 'logo'}}
+    {{/link-to}}
+    <div class="c-main-page__author-framework">
+      <div class="c-main-page__author-framework-item">
+        for <a href="http://emberjs.com" target="_blank">
+          {{svg-jar 'ember-logo' class="c-main-page__icon c-main-page__icon-ember"}}
+        </a>
+      </div>
+      <div class="c-main-page__author-framework-item">
+        by <a href="http://netguru.co" target="_blank">
+          {{svg-jar 'ng-logo' class="c-main-page__icon"}}
+        </a>
+      </div>
+    </div>
+
+    <div class="c-main-page__sentence">
+      Start using
+      <div class="c-main-page__technologies">
+        <span>Phoenix Channels</span>
+        <span>Socket.io</span>
+        <span>ActionCable</span>
+        <span>Pusher</span>
+      </div> in your ember app effortlessly!
+    </div>
+  </div>
+</div>

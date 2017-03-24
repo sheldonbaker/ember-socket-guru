@@ -1,0 +1,48 @@
+.c-main-page {
+  padding-top: 64px;
+  background-image: linear-gradient($bg-color-begin, $bg-color-end);
+  min-height: 100vh;
+
+  &__logo {
+    width: 224px;
+    margin-top: 64px;
+    display: flex;
+    margin: 0 auto;
+    background: rgba($color-black, .3);
+    border-radius: 100px;
+    padding: 15px 20px;
+  }
+
+  &__author-framework {
+    width: 224px;
+    display: flex;
+    margin: 10px auto 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__author-framework-item {
+    display: flex;
+    color: rgba($color-white, .3);
+    margin: 0 10px;
+    align-items: center;
+  }
+
+  &__icon {
+    display: flex;
+    margin-top: -1px;
+    margin-left: 7px;
+  }
+
+  &__icon-ember {
+    margin-top: -5px;
+  }
+
+  &__sentence {
+    position: relative;
+    display: flex;
+    text-align: center;
+    font-size: $fs-1;
+    color: $color-white;
+  }
+}

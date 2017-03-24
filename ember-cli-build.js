@@ -5,7 +5,9 @@ var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
   var app = new EmberAddon(defaults, {
-    // Add options here
+    svgJar: {
+      sourceDirs: ['tests/dummy/public'],
+    },
   });
 
   app.import('bower_components/pusher/dist/web/pusher.js');
