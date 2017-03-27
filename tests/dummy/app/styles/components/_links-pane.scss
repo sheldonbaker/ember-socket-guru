@@ -1,0 +1,12 @@
+.links-pane {
+  @include sizing(360px 196px);
+  @include flex-center();
+  background-color: $color-grey;
+  border-radius: 5px;
+
+  &__link {
+    display: block;
+    margin: 10px 0;
+    font-size: $fs-1 - 2px;
+  }
+}
