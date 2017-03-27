@@ -7,5 +7,9 @@
   &__icon {
     margin: 0 5px;
     vertical-align: middle;
+
+    &--github {
+      fill: rgba($color-white, .3);
+    }
   }
 }
