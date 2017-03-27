@@ -8,10 +8,12 @@ const Router = Ember.Router.extend({
 
 /* eslint-disable array-callback-return */
 Router.map(function() {
-  this.route('pusher-example');
-  this.route('socket-example');
-  this.route('phoenix-example');
-  this.route('action-cable-example');
+  this.route('technology', { path: '/:technology' }, function() {
+    this.route('installation');
+    this.route('getting-started');
+    this.route('observed-channels-structure');
+    this.route('socket-clients');
+  });
 });
 /* eslint-enable */
 
