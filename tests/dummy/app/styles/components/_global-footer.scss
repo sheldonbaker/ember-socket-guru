@@ -1,0 +1,11 @@
+.global-footer {
+  @include absolute(right 0 bottom 20px left 0);
+  width: 100%;
+  text-align: center;
+  color: rgba($color-white, .3);
+
+  &__icon {
+    margin: 0 5px;
+    vertical-align: middle;
+  }
+}
