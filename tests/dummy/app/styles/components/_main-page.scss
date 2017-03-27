@@ -41,7 +41,7 @@
   &__sentence {
     @include flex-center();
     position: relative;
-    margin-top: 70px;
+    margin-top: 60px;
     text-align: center;
     font-size: $fs-1;
     color: $color-white;
@@ -62,5 +62,47 @@
       display: block;
       color: $color-green;
     }
+  }
+
+  &__installation {
+    @include sizing(100% 100px);
+    @include flex-center();
+    margin-top: 60px;
+    text-align: center;
+    color: $color-white;
+
+  }
+
+  &__installation-pane {
+    @include sizing(500px 100px);
+    border-radius: 5px;
+    background-color: rgba($color-black, .3);
+  }
+
+  &__instruction-pane {
+    margin-top: 15px;
+  }
+
+  &__installation-text {
+    margin-top: 50px;
+    color: $color-white;
+    font-size: $fs-1;
+
+    &--green {
+      color: $color-green;
+    }
+  }
+
+  &__circle {
+    @include circle(10px);
+    display: block;
+    margin: 0 5px;
+    background-color: $bg-color-end;
+  }
+
+  &__circles {
+    @include sizing(100px 20px);
+    @include relative(top 10px left 10px);
+    display: flex;
   }
 }
