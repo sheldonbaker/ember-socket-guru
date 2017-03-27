@@ -39,10 +39,28 @@
   }
 
   &__sentence {
+    @include flex-center();
     position: relative;
-    display: flex;
+    margin-top: 70px;
     text-align: center;
     font-size: $fs-1;
     color: $color-white;
+
+    span {
+      display: inline-block;
+    }
+  }
+
+  &__technologies {
+    display: inline-block;
+    margin: 0 30px;
+    text-align: left;
+  }
+
+  &__technology {
+    span {
+      display: block;
+      color: $color-green;
+    }
   }
 }
