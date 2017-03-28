@@ -1,0 +1,5 @@
+.docs-navbar {
+  @include sizing(100% 100px);
+  display: flex;
+  justify-content: space-between;
+}
