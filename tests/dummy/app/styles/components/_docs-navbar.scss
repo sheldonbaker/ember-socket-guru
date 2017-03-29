@@ -1,5 +1,21 @@
 .docs-navbar {
-  @include sizing(100% 100px);
+  @include sizing(100% 150px);
   display: flex;
+  align-items: center;
   justify-content: space-between;
+
+  &__link {
+    svg {
+      vertical-align: middle;
+    }
+
+    &:not(:first-child) {
+      margin-left: 40px;
+    }
+
+    &--source {
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+  }
 }
