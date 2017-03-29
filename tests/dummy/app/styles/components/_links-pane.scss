@@ -1,6 +1,6 @@
 .links-pane {
-  @include sizing(360px 196px);
   @include flex-center();
+  height: 196px;
   background-color: $color-grey;
   border-radius: 5px;
 
