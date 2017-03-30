@@ -75,12 +75,24 @@
   }
 
   &__technology {
-    width: 150px;
+    display: flex;
+    width: 185px;
 
     span {
       display: block;
       color: $color-green;
       cursor: pointer;
+    }
+
+    img {
+      @include sizing(20px);
+      margin: 3px 15px 0 0;
+    }
+
+    &--faded {
+      span {
+        color: rgba($color-green, .3);
+      }
     }
   }
 
