@@ -16,23 +16,26 @@
       </div>
     </div>
 
+    <div class="c-main-page__options">
+      <div class="c-main-page__technologies c-main-page__technologies--alternative c-main-page__technologies--adjust-down">
+        {{#each upperTechnologies as |technology|}}
+          {{technology-entry technology=technology onClick=(action "selectTechnology")}}
+        {{/each}}
+      </div>
+    </div>
     <div class="c-main-page__sentence">
       <span>Start using</span>
       <div class="c-main-page__technologies">
-        <div class="c-main-page__technology">
-          <span>Phoenix Channels</span>
-        </div>
-        <div class="c-main-page__technology">
-          <span>Socket.io</span>
-        </div>
-        <div class="c-main-page__technology">
-          <span>ActionCable</span>
-        </div>
-        <div class="c-main-page__technology">
-          <span>Pusher</span>
-        </div>
+        {{technology-entry technology=selectedTechnology onClick=(action "selectTechnology")}}
       </div>
       <span>in your ember app effortlessly!</span>
+    </div>
+    <div class="c-main-page__options">
+      <div class="c-main-page__technologies c-main-page__technologies--alternative">
+        {{#each lowerTechnologies as |technology|}}
+          {{technology-entry technology=technology onClick=(action "selectTechnology")}}
+        {{/each}}
+      </div>
     </div>
 
     <div class="c-main-page__installation">
@@ -50,7 +53,7 @@
         </div>
       </div>
       <span class="c-main-page__version">Ember.js 2.3+ required (Ember.js 2.4+ recommended)</span>
-      <button class="c-main-page__button" {{action (route-action "onGetStartedClick")}}>Get started</button>
+      <button class="c-main-page__button" {{action "onGetStartedClick"}}>Get started</button>
     </div>
   </div>
   {{global-footer githubLink=true}}
