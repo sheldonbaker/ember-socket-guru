@@ -1,3 +1,8 @@
-{{#link-to link technology class=linkClass}}
-  {{label}}
-{{/link-to}}
+<div>
+  {{#if isSelected}}
+    {{svg-jar "arrow" class="links-pane__icon"}}
+  {{/if}}
+  {{#link-to link technology class=linkClass}}
+    {{label}}
+  {{/link-to}}
+</div>
