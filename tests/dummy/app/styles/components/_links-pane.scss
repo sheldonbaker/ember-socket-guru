@@ -8,5 +8,9 @@
     display: block;
     margin: 10px 0;
     font-size: $fs-1 - 2px;
+
+    &--selected {
+      color: $color-green !important;
+    }
   }
 }
