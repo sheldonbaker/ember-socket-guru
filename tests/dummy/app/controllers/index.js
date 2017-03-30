@@ -5,26 +5,22 @@ const { Controller, get, set, computed } = Ember;
 export default Controller.extend({
   technologies: [{
     name: 'Phoenix Channels',
-    img: '',
-    type: '',
+    img: 'phoenix-icon.png',
     position: 1,
     url: 'phoenix',
   }, {
     name: 'Socket.io',
-    img: '',
-    type: '',
+    img: 'socket-io-icon.png',
     position: 2,
     url: 'socketio',
   }, {
     name: 'ActionCable',
-    img: '',
-    type: '',
+    img: 'action-cable-icon.png',
     position: 3,
     url: 'action-cable',
   }, {
     name: 'Pusher',
-    img: '',
-    type: '',
+    img: 'pusher-icon.png',
     position: 4,
     url: 'pusher',
   }],
