@@ -41,7 +41,6 @@
   &__sentence {
     @include flex-center();
     position: relative;
-    margin-top: 60px;
     text-align: center;
     font-size: $fs-1;
     color: $color-white;
@@ -51,16 +50,37 @@
     }
   }
 
+  &__options {
+    display: flex;
+    position: relative;
+    min-height: 100px;
+    justify-content: center;
+    font-size: $fs-1;
+  }
+
   &__technologies {
     display: inline-block;
     margin: 0 30px;
     text-align: left;
+
+    &--alternative {
+      margin: 0 155px 0 0;
+    }
+
+    &--adjust-down {
+      display: flex;
+      align-self: flex-end;
+      flex-direction: column;
+    }
   }
 
   &__technology {
+    width: 150px;
+
     span {
       display: block;
       color: $color-green;
+      cursor: pointer;
     }
   }
 
