@@ -19,21 +19,21 @@
     <div class="c-main-page__options">
       <div class="c-main-page__technologies c-main-page__technologies--alternative c-main-page__technologies--adjust-down">
         {{#each upperTechnologies as |technology|}}
-          {{technology-entry technology=technology onClick=(action "selectTechnology")}}
+          {{technology-entry technology=technology onClick=(action "selectTechnology") selectedTechnology=selectedTechnology}}
         {{/each}}
       </div>
     </div>
     <div class="c-main-page__sentence">
       <span>Start using</span>
       <div class="c-main-page__technologies">
-        {{technology-entry technology=selectedTechnology onClick=(action "selectTechnology")}}
+        {{technology-entry technology=selectedTechnology onClick=(action "selectTechnology") selectedTechnology=selectedTechnology}}
       </div>
       <span>in your ember app effortlessly!</span>
     </div>
     <div class="c-main-page__options">
       <div class="c-main-page__technologies c-main-page__technologies--alternative">
         {{#each lowerTechnologies as |technology|}}
-          {{technology-entry technology=technology onClick=(action "selectTechnology")}}
+          {{technology-entry technology=technology onClick=(action "selectTechnology") selectedTechnology=selectedTechnology}}
         {{/each}}
       </div>
     </div>
