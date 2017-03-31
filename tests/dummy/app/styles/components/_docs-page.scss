@@ -1,0 +1,12 @@
+.docs-page {
+  &__code-pane {
+    display: flex;
+    height: 70px;
+    align-items: center;
+    border: 1px solid $color-grey;
+  }
+
+  &__install {
+    margin: 0 0 0 20px;
+  }
+}

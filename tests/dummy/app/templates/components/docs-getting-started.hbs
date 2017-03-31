@@ -1,0 +1,59 @@
+<h2>Setting up socket-guru service</h2>
+<p>To get started you need to create a service that will extend socket-guru service that comes with the addon:</p>
+<pre>
+  // app/services/socket-guru.js
+  import SocketGuruService from 'ember-socket-guru/services/socket-guru';
+
+  export default SocketGuruService.extend({
+    socketClient: 'pusher',
+    config: {
+      pusherKey: 'PUSHER_KEY',
+    },
+    observedChannels: {
+      channel1: ['event1']
+    },
+  });
+</pre>
+<p>There are few things that have to be provided in order for the addon to work properly:</p>
+<ul>
+  <li>socketClient: string name of the socket client you want to use. See Socket Clients for list of available options.</li>
+  <li>config: this hash should contain all required configuration for the used client (for more info see below for documentation for specific clients)</li>
+  <li>observedChannels: those are the channels and events that you want to listen to (see below for more info)</li>
+</ul>
+<h3>Usage</h3>
+<p>To actually be able to listen to events passed in from the clients, you need to extend SocketEventHandler mixin in your component/route/controller, for example like so:</p>
+<pre>
+  import SocketEventHandler from 'ember-socket-guru/mixins/socket-event-handler';
+  export default Route.extend(SocketEventHandler, {
+    onSocketAction(eventName, eventData) {
+    },
+
+    socketActions: {
+      catchEvent1(data) {
+        doSomething();
+      }
+    }
+  });
+</pre>
+<p>In this example whenever you trigger event1 a handler catchEvent1 will be executed. Whenever you trigger any other action it'll execute the onSocketAction handler.</p>
+<h3>Catching single event:</h3>
+<p>This way you can be very specific as to which event you want to handle.</p>
+<pre>
+  export default Route.extend(SocketEventHandler, {
+    socketActions: {
+      singleEvent(data) {
+       //do something
+      }
+    }
+  });
+</pre>
+<p>This will only execute the handler if action singleEvent is triggered.</p>
+<h3>Specifying catch-all function:</h3>
+<p>If you are not sure which event you want (or you want to catch all of them) you can specify onSocketAction method:</p>
+<pre>
+  export default Route.extend(SocketEventHandler, {
+    onSocketAction(eventName) {
+      //do something
+    }
+  });
+</pre>
