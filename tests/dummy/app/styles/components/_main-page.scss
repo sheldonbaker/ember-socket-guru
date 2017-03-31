@@ -1,0 +1,155 @@
+.c-main-page {
+  padding-top: 64px;
+  background-image: linear-gradient($bg-color-begin, $bg-color-end);
+  min-height: 100vh;
+
+  &__logo {
+    width: 224px;
+    margin-top: 64px;
+    display: flex;
+    margin: 0 auto;
+    background: rgba($color-black, .3);
+    border-radius: 100px;
+    padding: 15px 20px;
+  }
+
+  &__author-framework {
+    width: 224px;
+    display: flex;
+    margin: 10px auto 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__author-framework-item {
+    display: flex;
+    color: rgba($color-white, .3);
+    margin: 0 10px;
+    align-items: center;
+  }
+
+  &__icon {
+    display: flex;
+    margin-top: -1px;
+    margin-left: 7px;
+  }
+
+  &__icon-ember {
+    margin-top: -5px;
+  }
+
+  &__sentence {
+    @include flex-center();
+    position: relative;
+    text-align: center;
+    font-size: $fs-1;
+    color: $color-white;
+
+    span {
+      display: inline-block;
+    }
+  }
+
+  &__options {
+    display: flex;
+    position: relative;
+    min-height: 100px;
+    justify-content: center;
+    font-size: $fs-1;
+  }
+
+  &__technologies {
+    display: inline-block;
+    margin: 0 30px;
+    text-align: left;
+
+    &--alternative {
+      margin: 0 155px 0 0;
+    }
+
+    &--adjust-down {
+      display: flex;
+      align-self: flex-end;
+      flex-direction: column;
+    }
+  }
+
+  &__technology {
+    display: flex;
+    width: 185px;
+
+    span {
+      display: block;
+      color: $color-green;
+      cursor: pointer;
+    }
+
+    img {
+      @include sizing(20px);
+      margin: 3px 15px 0 0;
+    }
+
+    &--faded {
+      span {
+        color: rgba($color-green, .3);
+      }
+    }
+  }
+
+  &__installation {
+    @include sizing(100% 200px);
+    @include flex-center();
+    margin-top: 60px;
+    flex-direction: column;
+    text-align: center;
+    color: $color-white;
+
+  }
+
+  &__installation-pane {
+    @include sizing(500px 100px);
+    border-radius: 5px;
+    background-color: rgba($color-black, .3);
+  }
+
+  &__instruction-pane {
+    margin-top: 18px;
+  }
+
+  &__installation-text {
+    margin-top: 50px;
+    color: $color-white;
+    font-size: $fs-1;
+
+    &--green {
+      color: $color-green;
+    }
+  }
+
+  &__circle {
+    @include circle(10px);
+    display: block;
+    margin: 0 5px;
+    background-color: $bg-color-end;
+  }
+
+  &__circles {
+    @include sizing(100px 20px);
+    @include relative(top 10px left 10px);
+    display: flex;
+  }
+
+  &__version {
+    margin-top: 5px;
+    color: $color-black;
+    font-size: $fs-0;
+  }
+
+  &__button {
+    margin-top: 30px;
+    padding: 10px 30px;
+    background-color: $transparent;
+    border: 1px solid $color-green;
+    border-radius: 20px;
+  }
+}

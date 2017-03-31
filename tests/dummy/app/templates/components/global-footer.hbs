@@ -1,0 +1,11 @@
+<div>
+  <span>Brought to you with</span>
+  {{svg-jar 'heart-icon' class="global-footer__icon"}}
+  <span>by</span>
+  {{svg-jar 'ng-logo' class="global-footer__icon global-footer__icon--netguru"}}
+</div>
+{{#if githubLink}}
+  <a href="https://github.com/netguru/ember-socket-guru" class="global-footer__link">
+    <img src="github-icon.png">
+  </a>
+{{/if}}
