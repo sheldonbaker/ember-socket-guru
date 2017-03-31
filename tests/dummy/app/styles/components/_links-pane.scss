@@ -1,0 +1,27 @@
+.links-pane {
+  @include flex-center();
+  height: 196px;
+  background-color: $color-grey;
+  border-radius: 5px;
+
+  &__link {
+    display: inline-block;
+    margin: 10px 0 10px 80px;
+    vertical-align: middle;
+    font-size: $fs-1 - 2px;
+
+    &--selected {
+      margin: 10px 0 10px 14px;
+      color: $color-green !important;
+    }
+  }
+
+  &__icon {
+    margin-left: 40px;
+    vertical-align: middle;
+  }
+
+  &__pane {
+    width: 100%;
+  }
+}

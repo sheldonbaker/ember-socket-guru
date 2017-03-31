@@ -1,0 +1,23 @@
+.global-footer {
+  @include absolute(right 0 bottom 20px left 0);
+  @include sizing(100% 80px);
+  @include flex-center();
+  flex-direction: column;
+  text-align: center;
+  color: rgba($color-black, .3);
+
+  &__icon {
+    margin: 0 5px;
+    vertical-align: middle;
+
+    &--netguru {
+      g {
+        fill: $color-black;
+      }
+    }
+  }
+
+  &__link {
+    margin-top: 20px;
+  }
+}
