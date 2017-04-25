@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { Controller, get, set, computed } = Ember;
+const { Controller, get, set, computed, run } = Ember;
 
 export default Controller.extend({
   technologies: [{
@@ -25,6 +25,8 @@ export default Controller.extend({
     url: 'pusher',
   }],
 
+  isIncrementing: true,
+
   selectedTechnology: computed('technologies', function() {
     return get(this, 'technologies')[1];
   }),
@@ -45,6 +47,11 @@ export default Controller.extend({
     });
   }),
 
+  init() {
+    const selectedTechnology = get(this, 'selectedTechnology');
+    this._animateTechnologies();
+  },
+
   actions: {
     selectTechnology(name) {
       const technology = get(this, 'technologies')
@@ -59,5 +66,24 @@ export default Controller.extend({
         get(this, 'selectedTechnology.url')
       );
     },
+  },
+
+  _animateTechnologies() {
+    run.later(() => {
+      const selectedTechnology = get(this, 'selectedTechnology');
+      const technologies = get(this, 'technologies');
+      const position = technologies.indexOf(selectedTechnology);
+
+      if(position === (technologies.length - 1)) {
+        set(this, 'isIncrementing', false);
+      } else if (position === (0)) {
+        set(this, 'isIncrementing', true);
+      }
+
+      const next = get(this, 'isIncrementing') ? position + 1 : position - 1;
+
+      set(this, 'selectedTechnology', technologies[next]);
+      this._animateTechnologies();
+    }, 3000);
   },
 });

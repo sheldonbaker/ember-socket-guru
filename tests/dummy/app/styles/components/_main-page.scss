@@ -1,7 +1,11 @@
 .c-main-page {
-  padding-top: 64px;
+  padding-top: 50px;
   background-image: linear-gradient($bg-color-begin, $bg-color-end);
   min-height: 100vh;
+
+  @media #{$md-up} {
+    padding-top: 134px;
+  }
 
   &__logo {
     width: 224px;
@@ -15,6 +19,7 @@
 
   &__author-framework {
     width: 224px;
+    margin-bottom: 38px;
     display: flex;
     margin: 10px auto 0;
     justify-content: center;
@@ -26,6 +31,10 @@
     color: rgba($color-white, .3);
     margin: 0 10px;
     align-items: center;
+
+    svg g {
+      fill: rgba($color-white, .3);
+    }
   }
 
   &__icon {
@@ -44,10 +53,15 @@
     text-align: center;
     font-size: $fs-1;
     color: $color-white;
+    font-weight: $fw-normal;
 
     span {
       display: inline-block;
     }
+  }
+
+  &__hero {
+    margin-top: 39px;
   }
 
   &__options {
@@ -97,29 +111,45 @@
   }
 
   &__installation {
-    @include sizing(100% 200px);
     @include flex-center();
-    margin-top: 60px;
+    width: 100%;
+    margin-top: 100px;
     flex-direction: column;
     text-align: center;
     color: $color-white;
 
+    @media #{$md-up} {
+      margin-top: 60px;
+    }
   }
 
   &__installation-pane {
-    @include sizing(500px 100px);
     border-radius: 5px;
     background-color: rgba($color-black, .3);
+
+    @media #{$md-up} {
+      @include sizing(500px 100px);
+    }
   }
 
   &__instruction-pane {
+    padding: 5px 20px 15px;
+    font-family: $ff-code;
     margin-top: 18px;
+
+    @media #{$md-up} {
+      padding: 12px 0;
+    }
   }
 
   &__installation-text {
     margin-top: 50px;
     color: $color-white;
-    font-size: $fs-1;
+    font-size: $fs-4;
+
+    @media #{$md-up} {
+      font-size: $fs-1;
+    }
 
     &--green {
       color: $color-green;
@@ -130,7 +160,7 @@
     @include circle(10px);
     display: block;
     margin: 0 5px;
-    background-color: $bg-color-end;
+    background-color: $bg-color-middle;
   }
 
   &__circles {
@@ -146,10 +176,11 @@
   }
 
   &__button {
-    margin-top: 30px;
-    padding: 10px 30px;
+    margin-top: 68px;
+    padding: 10px 28px;
     background-color: $transparent;
     border: 1px solid $color-green;
-    border-radius: 20px;
+    border-radius: 27px;
+    font-size: $fs-2;
   }
 }

@@ -2,10 +2,12 @@
   <span>Brought to you with</span>
   {{svg-jar 'heart-icon' class="global-footer__icon"}}
   <span>by</span>
-  {{svg-jar 'ng-logo' class="global-footer__icon global-footer__icon--netguru"}}
+  <a href="https://netguru.co">
+    {{svg-jar 'ng-logo' class="global-footer__icon global-footer__icon--netguru"}}
+  </a>
 </div>
 {{#if githubLink}}
   <a href="https://github.com/netguru/ember-socket-guru" class="global-footer__link">
-    <img src="github-icon.png">
+    <img src="github-icon-white.png" alt="View source on github" class="global-footer__gh-logo">
   </a>
 {{/if}}

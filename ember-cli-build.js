@@ -8,6 +8,12 @@ module.exports = function(defaults) {
     svgJar: {
       sourceDirs: ['tests/dummy/public'],
     },
+    snippetPaths: ['tests/dummy/app/snippets'],
+    nodeAssets: {
+      'highlight.js': {
+        public: ['styles/solarized-dark.css']
+      }
+    }
   });
 
   app.import('bower_components/pusher/dist/web/pusher.js');

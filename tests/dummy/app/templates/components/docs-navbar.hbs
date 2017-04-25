@@ -1,15 +1,15 @@
-<div>
-  {{#link-to "index" class="docs-navbar__link"}}
+<div class="docs-navbar__link-container">
+  {{#link-to "index" class="docs-navbar__link docs-navbar__link-logo"}}
     {{svg-jar "logo-2"}}
   {{/link-to}}
   {{#link-to "index" class="docs-navbar__link"}}
     Start
   {{/link-to}}
-  {{#link-to "index" class="docs-navbar__link"}}
+  {{#link-to "technology" class="docs-navbar__link"}}
     Documentation
   {{/link-to}}
 </div>
-<a href="https://github.com/netguru/ember-socket-guru">
+<a href="https://github.com/netguru/ember-socket-guru" class="docs-navbar__link-source-container">
   <span class="docs-navbar__link docs-navbar__link--source">View source</span>
   <img src="github-icon.png">
 </a>

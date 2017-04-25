@@ -1,0 +1,32 @@
+.c-text-content {
+  ul,
+  p {
+    font-size: $fs-5;
+    line-height: 24px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: $fw-bold;
+  }
+
+  a {
+    color: $color-code-fg;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .hljs {
+    padding: 20px;
+    font-family: $ff-code;
+    font-weight: $fw-normal;
+    font-size: $fs-4;
+  }
+
+  code {
+    font-family: $ff-code;
+  }
+}
