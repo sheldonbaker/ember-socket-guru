@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 const { Controller, get, set, computed, run } = Ember;
 
+/* eslint-disable netguru-ember/alias-model-in-controller */
 export default Controller.extend({
   technologies: [{
     name: 'Phoenix Channels',
@@ -47,11 +48,6 @@ export default Controller.extend({
     });
   }),
 
-  init() {
-    const selectedTechnology = get(this, 'selectedTechnology');
-    this._animateTechnologies();
-  },
-
   actions: {
     selectTechnology(name) {
       const technology = get(this, 'technologies')
@@ -68,13 +64,17 @@ export default Controller.extend({
     },
   },
 
+  init() {
+    this._animateTechnologies();
+  },
+
   _animateTechnologies() {
     run.later(() => {
       const selectedTechnology = get(this, 'selectedTechnology');
       const technologies = get(this, 'technologies');
       const position = technologies.indexOf(selectedTechnology);
 
-      if(position === (technologies.length - 1)) {
+      if (position === (technologies.length - 1)) {
         set(this, 'isIncrementing', false);
       } else if (position === (0)) {
         set(this, 'isIncrementing', true);

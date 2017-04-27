@@ -1,4 +1,3 @@
-// app/services/socket-guru.js
 import SocketGuruService from 'ember-socket-guru/services/socket-guru';
 
 export default SocketGuruService.extend({
@@ -7,6 +6,6 @@ export default SocketGuruService.extend({
     pusherKey: 'PUSHER_KEY',
   },
   observedChannels: {
-    channel1: ['event1']
+    channel1: ['event1'],
   },
 });

@@ -17,10 +17,6 @@ const defaultInclude = ['pusher', 'socketio', 'phoenix', 'action-cable'];
 module.exports = {
   name: 'ember-socket-guru',
 
-  isDevelopingAddon() {
-    return true;
-  },
-
   included(app) {
     this._super.included.apply(this, arguments);
     // see: https://github.com/ember-cli/ember-cli/issues/3718
