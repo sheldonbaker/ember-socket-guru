@@ -22,5 +22,7 @@ module.exports = {
       maxEOF: 0,
       maxBOF: 0,
     }],
+    'no-undef': 'off',
+    'no-unused-vars': 'off',
   }
 };
