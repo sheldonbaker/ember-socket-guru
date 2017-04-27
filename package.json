@@ -1,17 +1,31 @@
 {
   "name": "ember-socket-guru",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "1.0.0",
+  "description": "Addon for easy integration of WebSockets implementation in your ember app (pusher, socket.io, phoenix channels, Action Cable)",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "web sockets",
+    "pusher",
+    "socket.io",
+    "action cable",
+    "phoenix channels",
+    "pusher-wrapper",
+    "ember-pusher",
+    "ember-socketio",
+    "ember-phoenix-channels",
+    "ember-actioncable",
+    "ember"
   ],
   "license": "MIT",
-  "author": "",
+  "author": {
+    "name": "Jacek Bandura",
+    "email": "jacek.bandura@netguru.pl"
+  },
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": "https://github.com/netguru/ember-socket-guru",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
