@@ -4,6 +4,8 @@ const { get, getProperties, assert, setProperties } = Ember;
 
 export default Ember.Object.extend({
   ioService: io,
+  hasNoChannels: true,
+
   // There's no concept of unsubscribing channels in socket.io
   unsubscribeChannels() {},
 

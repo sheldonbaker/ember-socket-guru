@@ -16,6 +16,7 @@ const {
   getOwner,
   Evented,
   isArray,
+  runInDebug,
 } = Ember;
 
 export default Service.extend(Evented, {
@@ -83,8 +84,8 @@ export default Service.extend(Evented, {
    */
   setup() {
     const socketClient = get(this, 'socketClientLookup')(getOwner(this), get(this, 'socketClient'));
-    this._checkOptions();
     set(this, 'client', socketClient);
+    runInDebug(() => this._checkOptions());
     get(this, 'client').setup(
       get(this, 'config'),
       this._handleEvent.bind(this)
@@ -163,6 +164,6 @@ export default Service.extend(Evented, {
   },
 
   _hasNoChannels() {
-    return get(this, 'socketClient') === 'socketio';
+    return !!get(this, 'client.hasNoChannels');
   },
 });

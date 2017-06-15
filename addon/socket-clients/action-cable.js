@@ -7,6 +7,7 @@ export default Ember.Object.extend({
   actionCable: null,
   eventHandler: null,
   joinedChannels: null,
+  hasNoChannels: true,
 
   setup(config, eventHandler) {
     assert(

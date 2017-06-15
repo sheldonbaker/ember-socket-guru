@@ -11,12 +11,14 @@ const socketClient = (
   setupSpy = function() {},
   subscribeSpy = function() {},
   disconnectSpy = function() {},
-  unsubscribeChannelsSpy = function() {}
+  unsubscribeChannelsSpy = function() {},
+  hasNoChannels = false
 ) => ({
   setup: setupSpy,
   subscribe: subscribeSpy,
   disconnect: disconnectSpy,
   unsubscribeChannels: unsubscribeChannelsSpy,
+  hasNoChannels,
 });
 
 function testUpdating(withChannels = null) {
@@ -27,7 +29,7 @@ function testUpdating(withChannels = null) {
     const unsubscribeChannelsSpy = sinon.spy();
     const socketClientLookup = () => {
       return socketClient(
-        function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
+        function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy, !withChannels
       );
     };
     const service = SocketGuruService.create({
@@ -61,7 +63,7 @@ function testAdding(withChannels = null) {
     const unsubscribeChannelsSpy = sinon.spy();
     const socketClientLookup = () => {
       return socketClient(
-        function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
+        function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy, !withChannels
       );
     };
     const observedChannels = withChannels ? { oldChannel: ['oldData'] } : ['oldEvent'];
@@ -90,7 +92,7 @@ function testRemoving(withChannels = null) {
     const unsubscribeChannelsSpy = sinon.spy();
     const socketClientLookup = () => {
       return socketClient(
-        function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy
+        function() {}, subscribeSpy, function() {}, unsubscribeChannelsSpy, !withChannels
       );
     };
     const observedChannels = withChannels
@@ -205,8 +207,11 @@ test('it doesnt call subscribe on on socketClient if autoConnect false', functio
 });
 
 test('it checks the observedChannels structure', function(assert) {
-  const client = socketClient();
-  const socketClientLookup = () => client;
+  const noop = () => {};
+  const socketClientLookup = (_, clientName) => {
+    const hasNoChannels = clientName === 'socketio' || clientName === 'action-cable';
+    return socketClient(noop, noop, noop, noop, hasNoChannels);
+  };
 
   assert.throws(
     () => {
@@ -244,6 +249,20 @@ test('it checks the observedChannels structure', function(assert) {
     },
     /must have correct structure/,
     'it verifies the observed channels structure for socket'
+  );
+
+  assert.throws(
+    () => {
+      SocketGuruService.create({
+        socketClientLookup,
+        socketClient: 'action-cable',
+        observedChannels: {
+          channel1: ['event1'],
+        },
+      });
+    },
+    /must have correct structure/,
+    'it verifies the observed channels structure for action-cable'
   );
 
   assert.throws(
