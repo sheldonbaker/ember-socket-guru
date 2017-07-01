@@ -7,7 +7,7 @@ const { get } = Ember;
 
 module('Unit | Socket Clients | pusher');
 
-const getPusherStub = (
+const getPusherStub = sinon.spy((
   bind = () => {},
   subscribe = () => {},
   unsubscribe = () => {},
@@ -16,7 +16,7 @@ const getPusherStub = (
   Object.assign(this, {
     subscribe, unsubscribe, disconnect, connection: { bind },
   });
-};
+});
 
 test('it verifies required config options', function(assert) {
   const client = PusherClient.create({
@@ -40,17 +40,31 @@ test('it verifies required config options', function(assert) {
 test('setup function', function(assert) {
   const bindSpy = sinon.spy();
   const pusherStub = getPusherStub(bindSpy);
-  const client = PusherClient.create({
+  let client = PusherClient.create({
     pusherService: pusherStub,
   });
 
-  client.setup({ pusherKey: 'foo' });
+  client.setup({ pusherKey: 'foo', cluster: 'APP_CLUSTER' });
   assert.ok(bindSpy.calledOnce, 'a bind method is called on pusher instance');
   const [action] = bindSpy.args[0];
   assert.equal(
     action,
     'connected',
     'proper event name is passed to pusher'
+  );
+
+  const spy = sinon.spy(() => ({ connection: { bind() {} } }));
+  client = PusherClient.create({
+    pusherService: spy,
+  });
+
+  client.setup({ pusherKey: 'foo', cluster: 'APP_CLUSTER' });
+  assert.ok(spy.calledWithNew, 'it calls the constructor');
+  assert.equal(spy.firstCall.args[0], 'foo', 'it passes proper key');
+  assert.deepEqual(
+    spy.firstCall.args[1],
+    { cluster: 'APP_CLUSTER' },
+    'it passes proper additional configs'
   );
 });
 

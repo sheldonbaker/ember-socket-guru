@@ -4,7 +4,9 @@
 <p>There are few things that have to be provided in order for the addon to work properly:</p>
 <ul>
   <li><code>socketClient</code>: string name of the socket client you want to use. See {{link-to "Socket Clients" "technology.socket-clients"}} for list of available options.</li>
-  <li><code>config</code>: this hash should contain all required configuration for the used client (for more info see {{link-to "Socket Clients" "technology.socket-clients"}} for documentation for specific clients)</li>
+  <li><code>config</code>: this hash should contain all required configuration for the used client (for more info see {{link-to "Socket Clients" "technology.socket-clients"}} for documentation for specific clients).
+    You can also pass all client-specific configuration options here.
+  </li>
   <li><code>observedChannels</code>: those are the channels and events that you want to listen to (see {{link-to "Observed Channels Structure" "technology.observed-channels-structure"}} for more info)</li>
 </ul>
 <h3>Usage</h3>

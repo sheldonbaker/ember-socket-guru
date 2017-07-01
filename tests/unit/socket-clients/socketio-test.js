@@ -46,10 +46,16 @@ test('setup function', function(assert) {
     ioService: ioStub,
   });
 
-  client.setup({ host: 'http://localhost:1234' }, eventHandlerSpy);
+  const clientOptions = { foo: 'bar' };
+
+  client.setup(
+    { host: 'http://localhost:1234', ...clientOptions },
+    eventHandlerSpy
+  );
 
   assert.ok(ioStub.calledOnce);
-  assert.equal(ioStub.args[0][0], 'http://localhost:1234');
+  assert.equal(ioStub.firstCall.args[0], 'http://localhost:1234');
+  assert.deepEqual(ioStub.firstCall.args[1], clientOptions, 'it passes client options to socketio');
   assert.ok(connectSpy.calledOnce);
   assert.equal(get(client, 'eventHandler'), eventHandlerSpy);
 });
