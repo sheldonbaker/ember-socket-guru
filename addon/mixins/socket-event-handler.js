@@ -28,11 +28,11 @@ export default Mixin.create({
   },
 
   _getEventMethod(methodName) {
-    const socketActions = get(this, 'socketActions') || [];
-    const method = Object.keys(socketActions)
-      .find((key) => key === methodName);
+    const socketActions = get(this, 'socketActions') || {};
+    const method = socketActions[methodName];
+
     if (method) {
-      return get(this, `socketActions.${methodName}`).bind(this);
+      return method.bind(this);
     }
   },
 });
