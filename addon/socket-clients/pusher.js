@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import { omit } from 'lodash';
 
 const {
   get, set, setProperties, $, run, assert, warn,
@@ -16,11 +15,12 @@ export default Ember.Object.extend({
   setup(config, eventHandler) {
     const PusherService = get(this, 'pusherService');
     this._checkConfig(config);
+    const { pusherKey, ...omittedConfig } = config;
     setProperties(this, {
       eventHandler,
       socket: new PusherService(
         get(config, 'pusherKey'),
-        omit(config, get(this, 'requiredConfigurationOptions'))
+        omittedConfig
       ),
     });
 

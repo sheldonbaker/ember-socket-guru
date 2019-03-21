@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import { omit } from 'lodash';
 
 const {
   get,
@@ -18,9 +17,10 @@ export default Ember.Object.extend({
 
   setup(config, eventHandler) {
     this._checkConfig(config);
+    const { host, ...omittedConfig } = config;
     const socket = get(this, 'ioService')(
       get(config, 'host'),
-      omit(config, get(this, 'requiredConfigurationOptions'))
+      omittedConfig
     );
     setProperties(this, { socket, eventHandler });
     socket.connect();
